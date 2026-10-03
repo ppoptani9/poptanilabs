@@ -206,6 +206,35 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;
 .sld{margin:10px 0 0}
 .sld-caps{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);
   font-weight:600;margin:1px 0 2px}
+/* custom calendar popup for date fields */
+.datewrap{position:relative}
+.datewrap input[type=date]{width:100%;padding-right:46px}
+.datewrap input[type=date]::-webkit-calendar-picker-indicator{display:none}
+.calbtn{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;
+  background:var(--card2);border:1.5px solid var(--line);border-radius:10px;color:var(--ink)}
+.calbtn:hover{border-color:var(--accent)}
+.cal-overlay{position:fixed;inset:0;z-index:198;background:rgba(0,0,0,.45)}
+.cal-pop{position:fixed;z-index:199;background:var(--card);border:1.5px solid var(--line);
+  border-radius:16px;box-shadow:var(--shadow);padding:14px;width:302px;max-width:calc(100vw - 28px)}
+.cal-pop.center{left:50%!important;top:50%!important;transform:translate(-50%,-50%)}
+.cal-head{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.cal-head select{flex:1;padding:8px 6px;margin:0;font-size:.9rem}
+.cal-nav{flex:none;width:34px;height:34px;border-radius:10px;border:1.5px solid var(--line);
+  background:var(--card2);color:var(--ink);font-size:1.2rem;cursor:pointer;line-height:1}
+.cal-nav:hover{border-color:var(--accent)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-grid .dow{font-size:.66rem;font-weight:800;color:var(--muted);text-align:center;padding:4px 0;
+  text-transform:uppercase;letter-spacing:.5px}
+.cal-day{aspect-ratio:1;border:0;background:none;border-radius:9px;cursor:pointer;color:var(--ink);
+  font-size:.86rem;font-weight:600;font-family:inherit;padding:0}
+.cal-day:hover:not(:disabled){background:var(--card2)}
+.cal-day:disabled{opacity:.25;cursor:default}
+.cal-day.today{box-shadow:inset 0 0 0 2px var(--accent2)}
+.cal-day.sel{background:linear-gradient(135deg,var(--accent-deep),var(--accent2));color:#fff;font-weight:800}
+[data-theme="dark"] .cal-day.sel{color:#06121f}
+.cal-foot{display:flex;justify-content:space-between;margin-top:10px}
+@media(prefers-reduced-motion:reduce){.cal-pop{transition:none}}
 /* results entrance + metric count-up polish */
 @keyframes riseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .rise{animation:riseIn .45s cubic-bezier(.2,.7,.3,1)}

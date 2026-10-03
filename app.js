@@ -307,6 +307,153 @@ function animateCount(el){
   })(t0);
 }
 function playCounts(scope){ scope.querySelectorAll(".v[data-raw]").forEach(animateCount); }
+
+/* ---------- custom calendar popup for date fields ---------- */
+const CAL_MONTHS = ["January","February","March","April","May","June",
+  "July","August","September","October","November","December"];
+let calPop = null, calOverlay = null, calFor = null, calView = {y:0, m:0};
+
+function calBounds(input){
+  const p = s => s ? parseDate(s) : null;
+  return [p(input.min), p(input.max)];
+}
+function ensureCal(){
+  if(calPop) return;
+  calOverlay = document.createElement("div");
+  calOverlay.className = "cal-overlay hidden";
+  calOverlay.addEventListener("click", closeCal);
+  calPop = document.createElement("div");
+  calPop.className = "cal-pop hidden";
+  calPop.setAttribute("role", "dialog");
+  calPop.setAttribute("aria-label", "Choose a date");
+  calPop.innerHTML =
+    '<div class="cal-head"><button type="button" class="cal-nav" data-nav="-1" aria-label="Previous month">‹</button>' +
+    '<select class="cal-month" aria-label="Month"></select>' +
+    '<select class="cal-year" aria-label="Year"></select>' +
+    '<button type="button" class="cal-nav" data-nav="1" aria-label="Next month">›</button></div>' +
+    '<div class="cal-grid"></div>' +
+    '<div class="cal-foot"><button type="button" class="chip" data-act="today">Today</button>' +
+    '<button type="button" class="chip" data-act="close">Done</button></div>';
+  document.body.appendChild(calOverlay);
+  document.body.appendChild(calPop);
+  calPop.querySelectorAll(".cal-nav").forEach(b => b.addEventListener("click", e => {
+    e.stopPropagation(); stepCal(parseInt(b.dataset.nav, 10));
+  }));
+  calPop.querySelector(".cal-month").addEventListener("change", e => { calView.m = parseInt(e.target.value,10); renderCal(); });
+  calPop.querySelector(".cal-year").addEventListener("change", e => { calView.y = parseInt(e.target.value,10); renderCal(); });
+  calPop.querySelector('[data-act="today"]').addEventListener("click", e => {
+    e.stopPropagation();
+    const t = new Date(); t.setHours(0,0,0,0);
+    pickCalDate(t);
+  });
+  calPop.querySelector('[data-act="close"]').addEventListener("click", e => { e.stopPropagation(); closeCal(); });
+  calPop.querySelector(".cal-grid").addEventListener("click", e => {
+    const b = e.target.closest(".cal-day");
+    if(!b || b.disabled) return;
+    e.stopPropagation();
+    pickCalDate(new Date(calView.y, calView.m, parseInt(b.dataset.day,10)));
+  });
+  document.addEventListener("click", e => {
+    if(calPop && !calPop.classList.contains("hidden") &&
+       !calPop.contains(e.target) && !e.target.closest(".datewrap")) closeCal();
+  });
+  document.addEventListener("keydown", e => { if(e.key === "Escape") closeCal(); });
+}
+function stepCal(d){
+  let y = calView.y, m = calView.m + d;
+  while(m < 0){ m += 12; y--; }
+  while(m > 11){ m -= 12; y++; }
+  const [mn, mx] = calBounds(calFor);
+  const y0 = mn ? mn.getFullYear() : y - 50, y1 = mx ? mx.getFullYear() : y + 50;
+  calView = {y: Math.min(y1, Math.max(y0, y)), m};
+  renderCal();
+}
+function pickCalDate(d){
+  d.setHours(0,0,0,0);
+  const [mn, mx] = calBounds(calFor);
+  if(mn && d < mn) d = new Date(mn);
+  if(mx && d > mx) d = new Date(mx);
+  const input = calFor;
+  input.value = fmtDate(d);
+  input.dispatchEvent(new Event("input", {bubbles:true}));
+  input.dispatchEvent(new Event("change", {bubbles:true}));
+  closeCal();
+  try{ input.focus({preventScroll:true}); }catch(e){ input.focus(); }
+}
+function openCal(input){
+  ensureCal();
+  calFor = input;
+  const [mn, mx] = calBounds(input);
+  let d = input.value ? parseDate(input.value) : new Date();
+  if(mn && d < mn) d = new Date(mn);
+  if(mx && d > mx) d = new Date(mx);
+  calView = {y: d.getFullYear(), m: d.getMonth()};
+  renderCal();
+  const modal = window.innerWidth <= 720;
+  calPop.classList.toggle("center", modal);
+  calOverlay.classList.toggle("hidden", !modal);
+  calPop.classList.remove("hidden");
+  if(!modal){
+    const r = input.getBoundingClientRect();
+    const pw = 302, ph = 350;
+    const left = Math.max(8, Math.min(r.left, window.innerWidth - pw - 8));
+    let top = r.bottom + 6;
+    if(top + ph > window.innerHeight - 8) top = Math.max(8, r.top - ph - 6);
+    calPop.style.left = left + "px";
+    calPop.style.top = top + "px";
+  }else{
+    calPop.style.left = ""; calPop.style.top = "";
+  }
+}
+function closeCal(){
+  if(!calPop) return;
+  calPop.classList.add("hidden");
+  if(calOverlay) calOverlay.classList.add("hidden");
+  calFor = null;
+}
+function renderCal(){
+  if(!calFor) return;
+  const [mn, mx] = calBounds(calFor);
+  const {y, m} = calView;
+  const mSel = calPop.querySelector(".cal-month"), ySel = calPop.querySelector(".cal-year");
+  mSel.innerHTML = CAL_MONTHS.map((n,i) => `<option value="${i}"${i===m?" selected":""}>${n}</option>`).join("");
+  const y0 = mn ? mn.getFullYear() : y - 30, y1 = mx ? mx.getFullYear() : y + 30;
+  let opts = "";
+  for(let yy = y0; yy <= y1; yy++) opts += `<option value="${yy}"${yy===y?" selected":""}>${yy}</option>`;
+  ySel.innerHTML = opts;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const sel = calFor.value ? parseDate(calFor.value) : null;
+  let html = ["Su","Mo","Tu","We","Th","Fr","Sa"].map(d => `<div class="dow">${d}</div>`).join("");
+  const first = new Date(y, m, 1).getDay();
+  const ndays = new Date(y, m+1, 0).getDate();
+  for(let i = 0; i < first; i++) html += "<div></div>";
+  for(let d = 1; d <= ndays; d++){
+    const dt = new Date(y, m, d); dt.setHours(0,0,0,0);
+    const dis = (mn && dt < mn) || (mx && dt > mx);
+    const cls = ["cal-day"];
+    if(dt.getTime() === today.getTime()) cls.push("today");
+    if(sel && dt.getTime() === sel.getTime()) cls.push("sel");
+    html += `<button type="button" class="${cls.join(" ")}" data-day="${d}"${dis?" disabled":""}>${d}</button>`;
+  }
+  calPop.querySelector(".cal-grid").innerHTML = html;
+}
+/* wrap a date input with a calendar trigger button */
+function initDatePicker(id){
+  const el = document.getElementById(id);
+  if(!el || el.closest(".datewrap")) return;
+  const wrap = document.createElement("div");
+  wrap.className = "datewrap";
+  el.parentNode.insertBefore(wrap, el);
+  wrap.appendChild(el);
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "calbtn";
+  btn.textContent = "📅";
+  btn.setAttribute("aria-label", "Pick a date from the calendar");
+  btn.addEventListener("click", e => { e.stopPropagation(); openCal(el); });
+  wrap.appendChild(btn);
+  el.addEventListener("click", () => openCal(el));
+}
 function setupInputs(){
   const minD = NAV[0].d, maxD = NAV[NAV.length-1].d;
   const today = new Date(); today.setHours(0,0,0,0);
@@ -592,6 +739,8 @@ document.addEventListener("DOMContentLoaded", () => {
   bindSlider("swpAmt","swpAmtSld",{min:1000,max:10000000,step:500,log:true});
   bindSlider("swpPct","swpPctSld",{min:0.1,max:100,step:0.1});
   bindSlider("swpCount","swpCountSld",{min:1,max:600,step:1});
+  // calendar pickers on date fields
+  ["lumpsumDate","swpStart","swpEnd"].forEach(initDatePicker);
   document.getElementById("pgPrev").addEventListener("click", () => { schedPage--; renderSchedPage(); });
   document.getElementById("pgNext").addEventListener("click", () => { schedPage++; renderSchedPage(); });
   const range = document.getElementById("whatifRange");

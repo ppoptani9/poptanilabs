@@ -242,6 +242,71 @@ function xirr(cashflows){
 
 /* ---------- inputs ---------- */
 const touched = new Set();   // input ids the user has edited (never overwritten by fund defaults)
+
+/* ---------- sliders: two-way sync with number inputs; log=true for wide money ranges ---------- */
+const SLIDERS = [];
+function bindSlider(numId, sldId, o){
+  const num = document.getElementById(numId), sld = document.getElementById(sldId);
+  if(!num || !sld) return null;
+  const min=o.min, max=o.max, step=o.step||1, log=!!o.log;
+  const lmin=Math.log(min), lspan=Math.log(max)-lmin;
+  const N = log ? 1000 : Math.max(1, Math.round((max-min)/step));
+  sld.min=0; sld.max=N; sld.step=1;
+  const toPos = v => {
+    v = Number(v); if(!isFinite(v)) v = min;
+    v = Math.min(max, Math.max(min, v));
+    return log ? Math.round(N*(Math.log(v)-lmin)/lspan) : Math.round((v-min)/step);
+  };
+  const toVal = p => {
+    let v = log ? Math.exp(lmin + (p/N)*lspan) : min + p*step;
+    v = parseFloat((Math.round(v/step)*step).toFixed(8));
+    return Math.min(max, Math.max(min, v));
+  };
+  const entry = {sync(){ sld.value = toPos(num.value); }};
+  sld.addEventListener("input", () => {
+    num.value = toVal(Number(sld.value));
+    num.dispatchEvent(new Event("input", {bubbles:true}));
+    maybeRerun();
+  });
+  num.addEventListener("input", entry.sync);
+  entry.sync();
+  SLIDERS.push(entry);
+  return entry;
+}
+function syncAllSliders(){ SLIDERS.forEach(s => s.sync()); }
+
+/* live re-run while dragging a slider, once results are already on screen */
+let rerunTimer = null;
+function maybeRerun(){
+  const card = document.getElementById("resultsCard");
+  if(!card || card.classList.contains("hidden")) return;
+  if(document.getElementById("runBtn").disabled) return;
+  clearTimeout(rerunTimer);
+  rerunTimer = setTimeout(() => runSimulation(true), 350);
+}
+
+/* ---------- metric count-up animation ---------- */
+const FMT = {
+  inr:  v => formatINR(v),
+  nav4: v => "₹" + v.toFixed(4),
+  num4: v => v.toLocaleString("en-IN",{maximumFractionDigits:4}),
+  int:  v => Math.round(v).toLocaleString("en-IN"),
+  pct:  v => v.toFixed(2) + "%"
+};
+function animateCount(el){
+  const raw = parseFloat(el.dataset.raw);
+  const fmt = FMT[el.dataset.fmt] || (v => String(v));
+  if(!isFinite(raw)){ el.textContent = fmt(0); return; }
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches){ el.textContent = fmt(raw); return; }
+  const dur = 750, t0 = performance.now();
+  (function frame(t){
+    const p = Math.min(1, (t - t0) / dur);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(raw * e);
+    if(p < 1) requestAnimationFrame(frame); else el.textContent = fmt(raw);
+  })(t0);
+}
+function playCounts(scope){ scope.querySelectorAll(".v[data-raw]").forEach(animateCount); }
 function setupInputs(){
   const minD = NAV[0].d, maxD = NAV[NAV.length-1].d;
   const today = new Date(); today.setHours(0,0,0,0);
@@ -254,6 +319,7 @@ function setupInputs(){
   set("swpEnd", fmtDate(capMax)); lim("swpEnd", minD, today);
   syncSwpMin();
   toggleSwpMode(); toggleEndMode();
+  syncAllSliders();
   updateReadiness();
 }
 function syncSwpMin(){
@@ -409,16 +475,22 @@ function renderSchedPage(){
 function renderResults(r, noscroll){
   const card = document.getElementById("resultsCard");
   card.classList.remove("hidden");
-  const m = (k,v,cls) => `<div class="metric"><div class="k">${k}</div><div class="v${cls?" "+cls:""}">${v}</div></div>`;
+  card.classList.remove("rise"); void card.offsetWidth; card.classList.add("rise");
+  const m = (k, raw, fmt, cls) =>
+    `<div class="metric"><div class="k">${k}</div><div class="v${cls?" "+cls:""}" data-raw="${raw}" data-fmt="${fmt}">${FMT[fmt](raw)}</div></div>`;
+  const xirrHtml = r.rate==null
+    ? `<div class="metric"><div class="k">XIRR (annualized, incl. residual)</div><div class="v">n/a</div></div>`
+    : m("XIRR (annualized, incl. residual)", r.rate*100, "pct", "good");
   document.getElementById("metrics").innerHTML =
-    m("Initial lumpsum", formatINR(r.lumpsum)) +
-    m("Lumpsum NAV", "₹"+r.lumpsumNAV.toFixed(4)) +
-    m("Initial units", r.initialUnits.toLocaleString("en-IN",{maximumFractionDigits:4})) +
-    m("Total withdrawn", formatINR(r.totalWithdrawn), "good") +
-    m("Current value (after SWP)", formatINR(r.remainingValue), "good") +
-    m("Withdrawals executed", r.done) +
-    m("XIRR (annualized, incl. residual)", r.rate==null ? "n/a" : (r.rate*100).toFixed(2)+"%", r.rate==null?"":"good") +
-    m("Total outcome", formatINR(r.totalWithdrawn + r.remainingValue), "good");
+    m("Initial lumpsum", r.lumpsum, "inr") +
+    m("Lumpsum NAV", r.lumpsumNAV, "nav4") +
+    m("Initial units", r.initialUnits, "num4") +
+    m("Total withdrawn", r.totalWithdrawn, "inr", "good") +
+    m("Current value (after SWP)", r.remainingValue, "inr", "good") +
+    m("Withdrawals executed", r.done, "int") +
+    xirrHtml +
+    m("Total outcome", r.totalWithdrawn + r.remainingValue, "inr", "good");
+  playCounts(document.getElementById("metrics"));
 
   // what-if slider (fixed-amount mode only)
   const mode = document.querySelector('input[name="swpMode"]:checked').value;
@@ -468,6 +540,7 @@ function renderResults(r, noscroll){
         {label:"Cumulative withdrawn (₹)", data:cumw, borderColor:c2, tension:.25, pointRadius:2}
       ]},
       options:{responsive:true, maintainAspectRatio:false,
+        animation:{duration:900, easing:"easeOutQuart"},
         plugins:{legend:{labels:{color:tick}}, tooltip:{callbacks:{label:c=>" "+c.dataset.label+": "+formatINR(c.parsed.y)}}},
         scales:{x:{ticks:{color:tick, maxTicksLimit:10}, grid:{color:grid}},
                 y:{ticks:{color:tick, callback:v=>formatINR(v)}, grid:{color:grid}}}}});
@@ -514,6 +587,11 @@ document.addEventListener("DOMContentLoaded", () => {
   _pre("swpStart", addYears(_t, -4));
   _pre("swpEnd", _t);
   toggleSwpMode(); toggleEndMode(); updateReadiness();
+  // sliders (log-scale for wide money ranges; high upper limits)
+  bindSlider("lumpsumAmt","lumpsumAmtSld",{min:10000,max:1000000000,step:1000,log:true});
+  bindSlider("swpAmt","swpAmtSld",{min:1000,max:10000000,step:500,log:true});
+  bindSlider("swpPct","swpPctSld",{min:0.1,max:100,step:0.1});
+  bindSlider("swpCount","swpCountSld",{min:1,max:600,step:1});
   document.getElementById("pgPrev").addEventListener("click", () => { schedPage--; renderSchedPage(); });
   document.getElementById("pgNext").addEventListener("click", () => { schedPage++; renderSchedPage(); });
   const range = document.getElementById("whatifRange");
@@ -522,6 +600,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearTimeout(whatifTimer);
     whatifTimer = setTimeout(() => {
       document.getElementById("swpAmt").value = range.value;
+      syncAllSliders();
       runSimulation(true);
     }, 250);
   });

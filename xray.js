@@ -101,6 +101,19 @@ function sectorOf(f, stock){
   return h ? h.sector : "";
 }
 
+/* ---------- tiny count-up for overlap percentages ---------- */
+function countUp(el){
+  const targ = parseFloat(el.dataset.countup);
+  if(!isFinite(targ)) return;
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches){ el.textContent = targ.toFixed(1)+"%"; return; }
+  const dur = 700, t0 = performance.now();
+  (function frame(t){
+    const p = Math.min(1, (t-t0)/dur), e = 1 - Math.pow(1-p, 3);
+    el.textContent = (targ*e).toFixed(1) + "%";
+    if(p < 1) requestAnimationFrame(frame); else el.textContent = targ.toFixed(1) + "%";
+  })(t0);
+}
+
 /* ---------- report ---------- */
 function shortName(n){ return n.replace(" - Growth","").replace(" Fund",""); }
 function runXray(){
@@ -127,7 +140,7 @@ function runXray(){
       if(i===j){ html += "<td>—</td>"; continue; }
       const p = pairs.find(p => (p.i===i&&p.j===j)||(p.i===j&&p.j===i));
       const hot = p.pct >= 50 ? ' style="color:var(--bad);font-weight:800"' : (p.pct >= 30 ? ' style="color:var(--warn);font-weight:700"' : "");
-      html += `<td${hot}>${p.pct.toFixed(1)}%<br><small class="hint">${p.shared} stocks</small></td>`;
+      html += `<td${hot}><span data-countup="${p.pct.toFixed(1)}">${p.pct.toFixed(1)}%</span><br><small class="hint">${p.shared} stocks</small></td>`;
     }
     html += "</tr>";
   }
@@ -141,9 +154,9 @@ function runXray(){
   const v = document.getElementById("verdict");
   const wa = shortName(selected[worst.i].name), wb = shortName(selected[worst.j].name);
   let msg, cls;
-  if(worst.pct >= 50){ msg = `⚠️ <b>${wa}</b> and <b>${wb}</b> overlap <b>${worst.pct.toFixed(1)}%</b> — they're largely doing the same job. One of them is probably redundant.`; cls="var(--bad)"; }
-  else if(worst.pct >= 30){ msg = `🔍 <b>${wa}</b> and <b>${wb}</b> overlap <b>${worst.pct.toFixed(1)}%</b> — meaningful common ground, but still distinct bets.`; cls="var(--warn)"; }
-  else { msg = `✅ Highest overlap is <b>${worst.pct.toFixed(1)}%</b> (${wa} × ${wb}) — your funds are genuinely diversified.`; cls="var(--good)"; }
+  if(worst.pct >= 50){ msg = `⚠️ <b>${wa}</b> and <b>${wb}</b> overlap <b data-countup="${worst.pct.toFixed(1)}">${worst.pct.toFixed(1)}%</b> — they're largely doing the same job. One of them is probably redundant.`; cls="var(--bad)"; }
+  else if(worst.pct >= 30){ msg = `🔍 <b>${wa}</b> and <b>${wb}</b> overlap <b data-countup="${worst.pct.toFixed(1)}">${worst.pct.toFixed(1)}%</b> — meaningful common ground, but still distinct bets.`; cls="var(--warn)"; }
+  else { msg = `✅ Highest overlap is <b data-countup="${worst.pct.toFixed(1)}">${worst.pct.toFixed(1)}%</b> (${wa} × ${wb}) — your funds are genuinely diversified.`; cls="var(--good)"; }
   v.innerHTML = `<div class="scheme" style="border-left:4px solid ${cls}">${msg}</div>`;
 
   // pair selector + shared table
@@ -181,8 +194,11 @@ function runXray(){
   document.getElementById("topBody").innerHTML = top.map(r =>
     `<tr><td>${r.s}</td><td>${r.sector}</td><td>${r.cnt} of ${n}</td><td><b>${r.avg.toFixed(2)}%</b></td></tr>`).join("");
 
-  document.getElementById("resultsCard").classList.remove("hidden");
-  document.getElementById("resultsCard").scrollIntoView({behavior:"smooth"});
+  const rc = document.getElementById("resultsCard");
+  rc.classList.remove("hidden");
+  rc.classList.remove("rise"); void rc.offsetWidth; rc.classList.add("rise");
+  rc.querySelectorAll("[data-countup]").forEach(countUp);
+  rc.scrollIntoView({behavior:"smooth"});
 }
 
 /* ---------- wiring ---------- */

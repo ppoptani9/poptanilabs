@@ -140,6 +140,7 @@ input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
 .metric .k{font-size:.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 .metric .v{font-size:1.32rem;font-weight:800;margin-top:6px;font-family:Fraunces,Georgia,serif}
 .metric .v.good{color:var(--good)}
+.metric .v.neg{color:var(--bad)}
 table.sched{width:100%;border-collapse:collapse;font-size:.87rem}
 table.sched thead th{position:sticky;top:0;background:var(--card2);z-index:1}
 table.sched th,table.sched td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
@@ -201,6 +202,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   background:var(--card);border:3px solid var(--accent);box-shadow:0 2px 10px rgba(0,0,0,.25);cursor:pointer}
 input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;
   background:var(--card);border:3px solid var(--accent);box-shadow:0 2px 10px rgba(0,0,0,.25);cursor:pointer}
+/* input sliders paired with number fields: full-width, min/max captions */
+.sld{margin:10px 0 0}
+.sld-caps{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);
+  font-weight:600;margin:1px 0 2px}
+/* results entrance + metric count-up polish */
+@keyframes riseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rise{animation:riseIn .45s cubic-bezier(.2,.7,.3,1)}
+.metric .v{font-variant-numeric:tabular-nums}
+@keyframes popIn{0%{transform:scale(.96)}60%{transform:scale(1.015)}100%{transform:scale(1)}}
+.pop{animation:popIn .35s ease-out}
+@media(prefers-reduced-motion:reduce){
+  .rise,.pop{animation:none}
+  input[type=range]{transition:none}
+}
 details.howcard{border:0}
 details.howcard>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;
   font-family:Fraunces,Georgia,serif;font-size:1.35rem;font-weight:700;padding:4px 0}

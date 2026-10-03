@@ -199,6 +199,73 @@ function xirr(cashflows){
 
 /* ---------- inputs ---------- */
 const touched = new Set();
+
+/* ---------- sliders: two-way sync with number inputs; log=true for wide money ranges ---------- */
+const SLIDERS = [];
+function bindSlider(numId, sldId, o){
+  const num = document.getElementById(numId), sld = document.getElementById(sldId);
+  if(!num || !sld) return null;
+  const min=o.min, max=o.max, step=o.step||1, log=!!o.log;
+  const lmin=Math.log(min), lspan=Math.log(max)-lmin;
+  const N = log ? 1000 : Math.max(1, Math.round((max-min)/step));
+  sld.min=0; sld.max=N; sld.step=1;
+  const toPos = v => {
+    v = Number(v); if(!isFinite(v)) v = min;
+    v = Math.min(max, Math.max(min, v));
+    return log ? Math.round(N*(Math.log(v)-lmin)/lspan) : Math.round((v-min)/step);
+  };
+  const toVal = p => {
+    let v = log ? Math.exp(lmin + (p/N)*lspan) : min + p*step;
+    v = parseFloat((Math.round(v/step)*step).toFixed(8));
+    return Math.min(max, Math.max(min, v));
+  };
+  const entry = {sync(){ sld.value = toPos(num.value); }};
+  sld.addEventListener("input", () => {
+    num.value = toVal(Number(sld.value));
+    num.dispatchEvent(new Event("input", {bubbles:true}));
+    maybeRerun();
+  });
+  num.addEventListener("input", entry.sync);
+  entry.sync();
+  SLIDERS.push(entry);
+  return entry;
+}
+function syncAllSliders(){ SLIDERS.forEach(s => s.sync()); }
+
+/* live re-run while dragging a slider, once results are already on screen */
+let rerunTimer = null;
+function maybeRerun(){
+  const card = document.getElementById("resultsCard");
+  if(!card || card.classList.contains("hidden")) return;
+  if(document.getElementById("runBtn").disabled) return;
+  clearTimeout(rerunTimer);
+  rerunTimer = setTimeout(() => runSimulation(true), 350);
+}
+
+/* ---------- metric count-up animation ---------- */
+const FMT = {
+  inr:  v => formatINR(v),
+  int:  v => Math.round(v).toLocaleString("en-IN"),
+  pct:  v => v.toFixed(2) + "%",
+  gain: (g,i) => { const p = i ? g/i*100 : 0;
+    return `${formatINR(g)} (${p>=0?"+":""}${p.toFixed(2)}%)`; }
+};
+function animateCount(el){
+  const parts = String(el.dataset.raw).split("|").map(Number);
+  const targ = parts[0], extra = parts[1];
+  const fmt = FMT[el.dataset.fmt] || (v => String(v));
+  const show = v => { el.textContent = fmt(v, extra); };
+  if(!isFinite(targ)){ show(targ); return; }
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches){ show(targ); return; }
+  const dur = 750, t0 = performance.now();
+  (function frame(t){
+    const p = Math.min(1, (t - t0) / dur);
+    const e = 1 - Math.pow(1 - p, 3);
+    show(targ * e);
+    if(p < 1) requestAnimationFrame(frame); else show(targ);
+  })(t0);
+}
+function playCounts(scope){ scope.querySelectorAll(".v[data-raw]").forEach(animateCount); }
 function setupInputs(){
   const minD = NAV[0].d, maxD = NAV[NAV.length-1].d;
   const today = new Date(); today.setHours(0,0,0,0);
@@ -209,6 +276,7 @@ function setupInputs(){
   const lim = (id, mn, mx) => { const el=document.getElementById(id); el.min=fmtDate(mn); el.max=fmtDate(mx); };
   set("sipStart", fmtDate(defStart)); lim("sipStart", minD, today);
   set("sipEnd", fmtDate(capMax)); lim("sipEnd", minD, today);
+  syncAllSliders();
   updateReadiness();
 }
 
@@ -237,7 +305,7 @@ function updateReadiness(){
 }
 
 /* ---------- SIP simulation (mirrors the Streamlit page) ---------- */
-function runSimulation(){
+function runSimulation(noscroll){
   const errBox = document.getElementById("simError");
   errBox.classList.add("hidden"); errBox.textContent = "";
   try{
@@ -280,7 +348,7 @@ function runSimulation(){
     cashflows.push([latestNAVDate.getTime(), value]);
     const rate = xirr(cashflows);
     const gain = value - invested;
-    renderResults({invested, value, gain, rate, n:rows.length, rows});
+    renderResults({invested, value, gain, rate, n:rows.length, rows}, !!noscroll);
   }catch(e){
     errBox.textContent = e.message;
     errBox.classList.remove("hidden");
@@ -293,18 +361,24 @@ let chartObj = null;
 let schedRows = [], schedPage = 0;
 const SCHED_PAGE_SIZE = 15;
 
-function metric(label, value, cls){
-  return `<div class="metric"><div class="k">${label}</div><div class="v ${cls||""}">${value}</div></div>`;
+function metric(label, raw, fmt, cls){
+  return `<div class="metric"><div class="k">${label}</div><div class="v ${cls||""}" data-raw="${raw}" data-fmt="${fmt}">${FMT[fmt](...String(raw).split("|").map(Number))}</div></div>`;
 }
-function renderResults(r){
+function renderResults(r, noscroll){
+  const card = document.getElementById("resultsCard");
+  card.classList.remove("hidden");
+  card.classList.remove("rise"); void card.offsetWidth; card.classList.add("rise");
   const m = document.getElementById("metrics");
-  const gpct = r.invested ? (r.gain/r.invested*100) : 0;
+  const xirrHtml = r.rate==null
+    ? `<div class="metric"><div class="k">XIRR</div><div class="v">n/a</div></div>`
+    : metric("XIRR", (r.rate*100).toFixed(6), "pct");
   m.innerHTML =
-    metric("Total invested", formatINR(r.invested)) +
-    metric("Current value", formatINR(r.value)) +
-    metric("Gain / Loss", `${formatINR(r.gain)} (${gpct>=0?"+":""}${gpct.toFixed(2)}%)`, r.gain>=0?"pos":"neg") +
-    metric("XIRR", r.rate==null ? "n/a" : (r.rate*100).toFixed(2)+"%") +
-    metric("Instalments", r.n);
+    metric("Total invested", r.invested, "inr") +
+    metric("Current value", r.value, "inr") +
+    metric("Gain / Loss", r.gain + "|" + r.invested, "gain", r.gain>=0?"good":"neg") +
+    xirrHtml +
+    metric("Instalments", r.n, "int");
+  playCounts(m);
   schedRows = r.rows; schedPage = 0;
   document.getElementById("schedNote").textContent =
     `${r.n} monthly instalments · valued at the latest NAV (${fmtDate(NAV[NAV.length-1].d)})`;
@@ -312,7 +386,7 @@ function renderResults(r){
   document.getElementById("schedPager").classList.toggle("hidden", r.rows.length <= SCHED_PAGE_SIZE);
   drawChart(r.rows);
   document.getElementById("resultsCard").classList.remove("hidden");
-  document.getElementById("resultsCard").scrollIntoView({behavior:"smooth"});
+  if(!noscroll) document.getElementById("resultsCard").scrollIntoView({behavior:"smooth"});
 }
 function renderSchedPage(){
   const tb = document.getElementById("schedBody");
@@ -342,6 +416,7 @@ function drawChart(rows){
          borderColor:"#E07F36", backgroundColor:"rgba(224,127,54,.12)", fill:true, tension:.25, pointRadius:0}
       ]},
     options:{ responsive:true, maintainAspectRatio:false,
+      animation:{duration:900, easing:"easeOutQuart"},
       plugins:{ legend:{labels:{color:tick}},
         tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${formatINR(c.parsed.y)}`}} },
       scales:{ x:{ticks:{color:tick, maxTicksLimit:8}, grid:{color:grid}},
@@ -400,6 +475,10 @@ function init(){
   const _pre = (id, d) => { const el = document.getElementById(id); if(!el.value) el.value = fmtDate(d); };
   _pre("sipStart", _fiveY);
   _pre("sipEnd", _t);
+  // sliders (log-scale for the wide money range; high upper limit)
+  bindSlider("sipAmt","sipAmtSld",{min:500,max:10000000,step:100,log:true});
+  bindSlider("sipDay","sipDaySld",{min:1,max:28,step:1});
+  bindSlider("stepUp","stepUpSld",{min:0,max:100,step:0.5});
   loadFundList();
   updateReadiness();
 }

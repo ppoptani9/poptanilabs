@@ -62,6 +62,34 @@ header.site{position:sticky;top:0;z-index:50;
 .hero.slim h1{font-size:clamp(1.6rem,3.4vw,2.2rem)}
 .hero.slim p{font-size:.95rem;margin-bottom:0}
 .hero.slim .hero-art{display:none}
+/* Tools dropdown in the header nav */
+.navdrop{position:relative;display:inline-flex;align-items:center}
+.navdrop-btn{cursor:pointer;background:none;border:0;font:inherit;color:var(--muted);
+  font-weight:600;font-size:.92rem;padding:10px 12px;border-radius:10px;
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.navdrop-btn:hover{color:var(--accent-deep);background:var(--card2)}
+.navdrop-btn.active{color:var(--accent-deep)}
+.navdrop-btn .caret{font-size:.65em;transition:transform .15s;color:var(--muted)}
+.navdrop:hover .caret,.navdrop:focus-within .caret{transform:rotate(180deg)}
+.navdrop-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:252px;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  box-shadow:var(--shadow);padding:8px;display:none;z-index:80}
+.navdrop:hover .navdrop-menu,.navdrop:focus-within .navdrop-menu{display:block}
+.navdrop-menu a{display:flex;flex-direction:column;gap:2px;padding:10px 14px;
+  border-radius:10px;text-decoration:none}
+.navdrop-menu a:hover{background:var(--card2)}
+.navdrop-menu a b{color:var(--ink);font-size:.95rem;font-weight:700}
+.navdrop-menu a small{color:var(--muted);font-size:.78rem}
+.navdrop-menu a.active b{color:var(--accent-deep)}
+@media(max-width:720px){
+  .navdrop-btn{padding:8px 10px;font-size:.84rem;flex:none}
+  /* the open menu must escape the scrollable nav row;
+     (position:fixed is unusable here: the header's backdrop-filter traps it) */
+  .nav:has(.navdrop:focus-within){overflow:visible}
+  .navdrop-menu{min-width:230px;padding:8px}
+  .navdrop-menu a{padding:12px 14px}
+  .navdrop-menu a b{font-size:.98rem}
+}
 .hero .kicker{display:inline-block;font-family:Inter,system-ui,sans-serif;font-size:.78rem;font-weight:700;
   letter-spacing:2px;text-transform:uppercase;color:var(--accent-deep);
   background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:7px 16px;margin-bottom:14px}
@@ -194,15 +222,18 @@ input[type=radio]{accent-color:var(--accent-deep);width:1.05em;height:1.05em}
 /* ---------- mobile ---------- */
 @media(max-width:720px){
   .wrap{padding:0 14px}
-  /* single scrollable header row: brand + links + toggle, no jumble */
-  .nav{flex-wrap:nowrap;overflow-x:auto;gap:10px;padding:10px 0;
-    scrollbar-width:none;-ms-overflow-style:none}
+  /* mobile header: no horizontal scroll — clean wrapping row.
+     Legal links (About/Privacy/Contact) live in the footer; the toggle is icon-only. */
+  .nav{flex-wrap:wrap;overflow:visible;gap:8px;padding:10px 0;row-gap:4px}
   .nav::-webkit-scrollbar{display:none}
   .brand{flex:none;font-size:1.12rem}
-  .nav nav{margin-left:0;flex:none;flex-wrap:nowrap;gap:2px}
+  .nav nav{margin-left:0;flex:none;flex-wrap:wrap;gap:2px;row-gap:4px;align-items:center}
   .nav nav a{white-space:nowrap;flex:none;padding:8px 10px;font-size:.84rem}
+  .nav nav a[href$="about.html"],
+  .nav nav a[href$="privacy.html"],
+  .nav nav a[href$="contact.html"]{display:none}
   .lswitch{flex:none;white-space:nowrap;padding:6px 4px}
-  .lswitch .lname{font-size:.76rem}
+  .lswitch .lname{display:none}
   .govbanner{font-size:.68rem;padding:7px 0}
   .hero{padding:30px 0 10px}
   .hero.slim{padding:20px 0 4px}

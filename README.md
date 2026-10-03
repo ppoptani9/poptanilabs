@@ -67,4 +67,5 @@ there is no CI. See [docs/DEPLOY.md](docs/DEPLOY.md) for the release checklist
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+All rights reserved — see [LICENSE](LICENSE). No part of this project may be
+reused, reproduced, or built upon without prior written permission.

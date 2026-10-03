@@ -53,9 +53,10 @@
         <div class="sld-caps"><span>₹500</span><span>₹1Cr</span></div>
         <div class="hint" id="sipAmtHint"></div>
         <label for="sipDay">SIP date (day of month)</label>
-        <input type="number" id="sipDay" min="1" max="28" step="1" value="10">
+        <input type="number" id="sipDay" min="1" max="31" step="1" value="10">
         <input type="range" id="sipDaySld" class="sld" aria-label="SIP day slider">
-        <div class="sld-caps"><span>1</span><span>28</span></div>
+        <div class="sld-caps"><span>1</span><span>31</span></div>
+        <div class="hint">29th–31st automatically becomes the month's last day in shorter months.</div>
       </div>
       <div>
         <label for="sipStart">SIP start date</label>
@@ -190,6 +191,6 @@
     <div style="margin-top:6px">Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
   </div>
 </footer>
-<script src="/sip.js?v=20261003f" defer></script>
+<script src="/sip.js?v=20261003g" defer></script>
 </body>
 </html>

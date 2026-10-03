@@ -438,7 +438,7 @@ function updateReadiness(){
   const amt = parseFloat(g("sipAmt").value);
   items.push({ok: amt>=100, label: amt>=100 ? `SIP: ${formatINR(amt)} / month` : "Enter a monthly SIP amount (min ₹100)"});
   const day = parseInt(g("sipDay").value, 10);
-  items.push({ok: day>=1 && day<=28, label: (day>=1 && day<=28) ? `SIP date: ${day}th of every month` : "Enter a SIP day between 1 and 28"});
+  items.push({ok: day>=1 && day<=31, label: (day>=1 && day<=31) ? `SIP date: ${day}th of every month` : "Enter a SIP day between 1 and 31"});
   const sd = g("sipStart").value, ed = g("sipEnd").value;
   items.push({ok: !!sd, label: sd ? `SIP starts: ${sd}` : "Enter the SIP start date"});
   const endOk = !!ed && (!sd || parseDate(ed) >= parseDate(sd));
@@ -463,7 +463,7 @@ function runSimulation(noscroll){
     const end = parseDate(document.getElementById("sipEnd").value);
     const stepUp = parseFloat(document.getElementById("stepUp").value);
     if(!(sipAmt>=100)) throw new Error("Monthly SIP must be at least ₹100.");
-    if(!(sipDay>=1 && sipDay<=28)) throw new Error("SIP day must be between 1 and 28.");
+    if(!(sipDay>=1 && sipDay<=31)) throw new Error("SIP day must be between 1 and 31.");
     if(end < start) throw new Error("End date can't be before the start date.");
 
     let units = 0, invested = 0;
@@ -624,7 +624,7 @@ function init(){
   _pre("sipEnd", _t);
   // sliders (log-scale for the wide money range; high upper limit)
   bindSlider("sipAmt","sipAmtSld",{min:500,max:10000000,step:100,log:true});
-  bindSlider("sipDay","sipDaySld",{min:1,max:28,step:1});
+  bindSlider("sipDay","sipDaySld",{min:1,max:31,step:1});
   bindSlider("stepUp","stepUpSld",{min:0,max:100,step:0.5});
   // calendar pickers on date fields
   ["sipStart","sipEnd"].forEach(initDatePicker);

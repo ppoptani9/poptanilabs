@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261003h">
+<link rel="stylesheet" href="/styles.css?v=20261003i">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
 </head>
@@ -49,9 +49,13 @@
       <div>
         <label for="sipAmt">Monthly SIP amount (₹)</label>
         <input type="number" id="sipAmt" min="100" step="500" value="10000">
+        <input type="range" id="sipAmtSld" class="sld" aria-label="Monthly SIP amount slider">
+        <div class="sld-caps"><span>₹500</span><span>₹1Cr</span></div>
         <div class="hint" id="sipAmtHint"></div>
         <label for="sipDay">SIP date (day of month)</label>
         <input type="number" id="sipDay" min="1" max="28" step="1" value="10">
+        <input type="range" id="sipDaySld" class="sld" aria-label="SIP day slider">
+        <div class="sld-caps"><span>1</span><span>28</span></div>
       </div>
       <div>
         <label for="sipStart">SIP start date</label>
@@ -60,6 +64,8 @@
         <input type="date" id="sipEnd">
         <label for="stepUp">Annual step-up (%) <span class="hint" style="display:inline">— SIP grows by this much every 12 months</span></label>
         <input type="number" id="stepUp" min="0" max="100" step="1" value="10">
+        <input type="range" id="stepUpSld" class="sld" aria-label="Annual step-up slider">
+        <div class="sld-caps"><span>0%</span><span>100%</span></div>
       </div>
     </div>
     <div id="simError" class="err hidden"></div>
@@ -184,6 +190,6 @@
     <div style="margin-top:6px">Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
   </div>
 </footer>
-<script src="/sip.js?v=20261003d" defer></script>
+<script src="/sip.js?v=20261003e" defer></script>
 </body>
 </html>

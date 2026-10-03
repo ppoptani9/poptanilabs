@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261003h">
+<link rel="stylesheet" href="/styles.css?v=20261003i">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
 <!-- PAWAN: after Google AdSense approves this site, replace ca-pub-6679021817940576 with your publisher ID in app.js (ADSENSE_CLIENT) and here. -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
@@ -53,6 +53,8 @@
         <h3 style="margin:0 0 2px;font-size:1.05rem">Lumpsum investment</h3>
         <label for="lumpsumAmt">Lumpsum amount (₹)</label>
         <input type="number" id="lumpsumAmt" min="1" step="1000" value="1000000">
+        <input type="range" id="lumpsumAmtSld" class="sld" aria-label="Lumpsum amount slider">
+        <div class="sld-caps"><span>₹10K</span><span>₹100Cr</span></div>
         <label for="lumpsumDate">Lumpsum (investment) date</label>
         <input type="date" id="lumpsumDate">
       </div>
@@ -68,10 +70,14 @@
         <div id="fixedWrap">
           <label for="swpAmt">Withdrawal amount (₹) per event</label>
           <input type="number" id="swpAmt" min="1" step="500" value="10000">
+          <input type="range" id="swpAmtSld" class="sld" aria-label="Withdrawal amount slider">
+          <div class="sld-caps"><span>₹1K</span><span>₹1Cr</span></div>
         </div>
         <div id="pctWrap" class="hidden">
           <label for="swpPct">Withdraw percent (%) of <i>current balance value</i> each event</label>
           <input type="number" id="swpPct" min="0.1" max="100" step="0.1" value="1">
+          <input type="range" id="swpPctSld" class="sld" aria-label="Withdrawal percent slider">
+          <div class="sld-caps"><span>0.1%</span><span>100%</span></div>
         </div>
         <label for="freq">Withdrawal frequency</label>
         <select id="freq">
@@ -90,6 +96,8 @@
         <div id="endCountWrap" class="hidden">
           <label for="swpCount">Number of withdrawals</label>
           <input type="number" id="swpCount" min="1" step="1" value="12">
+          <input type="range" id="swpCountSld" class="sld" aria-label="Number of withdrawals slider">
+          <div class="sld-caps"><span>1</span><span>600</span></div>
         </div>
       </div>
     </div>
@@ -224,6 +232,6 @@
     <div style="margin-top:6px">Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
   </div>
 </footer>
-<script src="/app.js?v=20261003d" defer></script>
+<script src="/app.js?v=20261003e" defer></script>
 </body>
 </html>

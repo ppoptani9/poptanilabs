@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://poptanilabs.com/swp/">
+<title>SWP Simulator — Indian Mutual Funds | Poptani Labs</title>
+<meta name="description" content="Free SWP calculator for Indian mutual funds. Simulate a Systematic Withdrawal Plan from a lumpsum investment — withdrawals, remaining value, XIRR and downloadable schedule, using live NAV data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=20261003e">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+<!-- PAWAN: after Google AdSense approves this site, replace ca-pub-6679021817940576 with your publisher ID in app.js (ADSENSE_CLIENT) and here. -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="govbanner"><div class="wrap">● A free public tool &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Your data never leaves your browser</div></div>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+    <nav>
+      <a href="/swp/" class="active">SWP</a>
+      <a href="/sip/">SIP</a>
+      <a href="/xray/">X-Ray</a><a href="/blog/">Blog</a>
+      <a href="#how">How it works</a>
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/contact.html">Contact</a>
+      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">AMOLED dark</span></button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero slim">
+    <span class="kicker">Free · No sign-up · Live NAV data</span>
+    <h1>Watch your <span class="grad">SWP</span> bloom</h1>
+    <p>Simulate a Systematic Withdrawal Plan from a lumpsum mutual fund investment — pick a scheme, set your withdrawal, get the full run-down on live NAV history.</p>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div class="card" id="inputsCard">
+    <h2><span class="stepbadge">1</span> Your investment &amp; withdrawal plan <span class="sub">Set your corpus and SWP details first — you'll pick the fund in Step 2</span></h2>
+    <div class="grid2">
+      <div>
+        <h3 style="margin:0 0 2px;font-size:1.05rem">Lumpsum investment</h3>
+        <label for="lumpsumAmt">Lumpsum amount (₹)</label>
+        <input type="number" id="lumpsumAmt" min="1" step="1000" value="1000000">
+        <label for="lumpsumDate">Lumpsum (investment) date</label>
+        <input type="date" id="lumpsumDate">
+      </div>
+      <div>
+        <h3 style="margin:0 0 2px;font-size:1.05rem">SWP details</h3>
+        <label for="swpStart">SWP start date</label>
+        <input type="date" id="swpStart">
+        <label>Withdrawal mode</label>
+        <div class="row" style="gap:16px">
+          <label style="margin:0"><input type="radio" name="swpMode" value="fixed" checked style="width:auto"> Fixed amount</label>
+          <label style="margin:0"><input type="radio" name="swpMode" value="pct" style="width:auto"> % of balance</label>
+        </div>
+        <div id="fixedWrap">
+          <label for="swpAmt">Withdrawal amount (₹) per event</label>
+          <input type="number" id="swpAmt" min="1" step="500" value="10000">
+        </div>
+        <div id="pctWrap" class="hidden">
+          <label for="swpPct">Withdraw percent (%) of <i>current balance value</i> each event</label>
+          <input type="number" id="swpPct" min="0.1" max="100" step="0.1" value="1">
+        </div>
+        <label for="freq">Withdrawal frequency</label>
+        <select id="freq">
+          <option>Monthly</option><option>Quarterly</option><option>Yearly</option>
+          <option>Days:7 (Weekly)</option><option>Days:15</option>
+        </select>
+        <label>End SWP by</label>
+        <div class="row" style="gap:16px">
+          <label style="margin:0"><input type="radio" name="endMode" value="date" checked style="width:auto"> End date</label>
+          <label style="margin:0"><input type="radio" name="endMode" value="count" style="width:auto"> No. of withdrawals</label>
+        </div>
+        <div id="endDateWrap">
+          <label for="swpEnd">SWP end date (inclusive)</label>
+          <input type="date" id="swpEnd">
+        </div>
+        <div id="endCountWrap" class="hidden">
+          <label for="swpCount">Number of withdrawals</label>
+          <input type="number" id="swpCount" min="1" step="1" value="12">
+        </div>
+      </div>
+    </div>
+    <div id="simError" class="err hidden"></div>
+  </div>
+
+  <div class="card" id="fundCard">
+    <h2><span class="stepbadge">2</span> Select a mutual fund scheme <span class="sub">Search, or tap a popular fund — every chip is verified against the scheme list</span></h2>
+    <div class="row">
+      <div>
+        <label for="fundSearch">Search fund (partial match allowed)</label>
+        <input type="text" id="fundSearch" placeholder="e.g. parag parikh flexi cap" autocomplete="off">
+      </div>
+      <div style="max-width:220px">
+        <label for="amcFilter">Filter by AMC</label>
+        <select id="amcFilter"><option value="">All AMCs</option></select>
+      </div>
+    </div>
+    <div class="hint hidden" id="fundStatus" style="margin-top:8px">Loading scheme list…</div>
+    <div class="chips" id="quickPicks">
+      <button class="chip" data-q="parag parikh flexi cap">Parag Parikh Flexi Cap</button>
+      <button class="chip" data-q="hdfc flexi cap">HDFC Flexi Cap</button>
+      <button class="chip" data-q="quant small cap">Quant Small Cap</button>
+      <button class="chip" data-q="axis large cap">Axis Large Cap</button>
+      <button class="chip" data-q="nippon india small cap">Nippon India Small Cap</button>
+    </div>
+    <div id="fundResults" style="margin-top:8px"><div style="padding:12px" class="hint">Type to search 37,000+ schemes…</div></div>
+    <div id="schemeCard" class="hidden">
+      <div class="scheme">
+        <div class="nm" id="schemeName"></div>
+        <div class="mt" id="schemeMeta"></div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="card" id="runCard">
+    <h2><span class="stepbadge">3</span> Review &amp; run <span class="sub">The simulation runs only when every item below is confirmed</span></h2>
+    <div id="readiness" class="readiness"></div>
+    <div style="margin-top:16px"><button class="btn" id="runBtn" disabled>▶ Run SWP Simulation</button></div>
+  </div>
+
+<div class="card hidden" id="resultsCard">
+    <h2><span class="stepbadge">4</span> Simulation results</h2>
+    <div class="whatif hidden" id="whatif">
+      <div class="wi-head">
+        <span class="k">✨ What-if — drag to try a different withdrawal</span>
+        <span class="v" id="whatifVal">₹10.00K</span>
+      </div>
+      <input type="range" id="whatifRange" min="1000" max="100000" step="1000" value="10000" aria-label="Try a different withdrawal amount">
+      <div class="hint">Live preview — metrics, schedule and chart update as you drag.</div>
+    </div>
+    <div class="metrics" id="metrics"></div>
+    <h2>Withdrawal Schedule &amp; Run-down</h2>
+    <div class="hint" id="schedNote" style="margin-bottom:8px"></div>
+    <div class="tblwrap"><table class="sched">
+      <thead><tr><th>Withdrawal date</th><th>NAV date used</th><th>NAV (₹)</th><th>Units sold</th><th>Units remaining</th><th>Cash withdrawn</th><th>Balance after</th></tr></thead>
+      <tbody id="schedBody"></tbody>
+    </table></div>
+    <div class="pager hidden" id="schedPager">
+      <button id="pgPrev">← Prev</button>
+      <span class="pg" id="pgInfo"></span>
+      <button id="pgNext">Next →</button>
+    </div>
+    <div style="margin-top:12px"><button class="btn ghost" id="csvBtn">⬇ Download schedule (CSV)</button></div>
+    <h2 style="margin-top:22px">Charts</h2>
+    <div id="chartWrap" style="position:relative;height:360px"><canvas id="chart"></canvas></div>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div class="card" id="how">
+  <details class="howcard">
+    <summary><span>📖 Learn: what is SWP, how to use this, FAQs &amp; tax notes</span><span class="tw">▾</span></summary>
+    <div class="prose" style="margin-top:10px">
+    <h2>What is SWP?</h2>
+    <p>A <strong>Systematic Withdrawal Plan (SWP)</strong> lets you withdraw a fixed sum (or a fixed percentage) from your mutual fund investment at regular intervals — monthly, quarterly or yearly — while the remaining corpus stays invested and keeps compounding. It is the withdrawal mirror of a SIP, and is widely used to generate a regular income stream from a built-up corpus, for example in early retirement.</p>
+    <h2>How to use this calculator</h2>
+    <ol>
+      <li><strong>Search and select</strong> your mutual fund scheme above.</li>
+      <li>Enter your <strong>lumpsum amount and investment date</strong>.</li>
+      <li>Choose the <strong>SWP start date</strong>, withdrawal mode (<strong>fixed amount</strong> or <strong>% of balance</strong>), <strong>frequency</strong>, and when the SWP should end.</li>
+      <li>Hit <strong>Run SWP Simulation</strong> — the calculator replays history using actual NAVs: each withdrawal redeems units at the prevailing NAV, and you get the full schedule, remaining value at the latest NAV, and the <strong>XIRR</strong> of the whole cashflow.</li>
+    </ol>
+    <p>Withdrawals use the <strong>nearest previous available NAV</strong> for each date (markets are closed on weekends and holidays). If a withdrawal would exceed the balance, the plan simply pays out whatever is left and ends.</p>
+    <h2>SWP taxation in India — the short version</h2>
+    <p>Each SWP instalment counts as a <strong>redemption</strong>, so capital-gains tax applies only to the <em>gain portion</em> of each withdrawal, not the full amount. As a rough guide for units bought on or after 23 July 2024: equity-oriented funds held over 12 months face <strong>12.5% LTCG</strong> above ₹1.25 lakh/year; shorter holdings face <strong>20% STCG</strong>. Debt-oriented fund gains are taxed at your <strong>slab rate</strong>. Tax rules change — treat this as orientation, not tax advice, and confirm current rules before acting.</p>
+    <div class="faq">
+      <h2>Frequently asked questions</h2>
+      <details><summary>Is SWP better than keeping money in a savings account?</summary><p>SWP keeps your money market-linked, so returns can beat a savings account over long periods — but unlike a savings account, the corpus can also fall. SWP suits money you won't need for several years.</p></details>
+      <details><summary>What withdrawal rate is sustainable?</summary><p>A common rule of thumb is to keep annual withdrawals well below the fund's expected long-run return. Many planners use <strong>3–4% per year</strong> as a conservative perpetual rate for equity-heavy portfolios.</p></details>
+      <details><summary>Fixed amount or percent of balance?</summary><p>Fixed amount gives predictable income but can drain the corpus in a prolonged downturn. Percent-of-balance never fully depletes the corpus, but your income fluctuates with the market.</p></details>
+      <details><summary>Where does the NAV data come from?</summary><p>Live from <a href="https://www.mfapi.in/" rel="noopener">mfapi.in</a>, a free mutual-fund NAV API. Scheme lists refresh daily; NAV histories are fetched per scheme on demand.</p></details>
+      <details><summary>Is my data stored anywhere?</summary><p>No. Everything runs in your browser — no accounts, no tracking of your inputs. See the <a href="/privacy.html">privacy policy</a>.</p></details>
+    </div>
+    <div class="disclaimer"><strong>Disclaimer:</strong> This is an educational simulation tool, not financial advice. Mutual fund investments are subject to market risks — read all scheme documents carefully before investing. Past NAV performance does not guarantee future results.</div>
+    </div>
+  </details>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fl">
+      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
+    </div>
+    <div>SWPCalc — free Systematic Withdrawal Plan simulator for Indian mutual funds. NAV data: mfapi.in. Built with open tools.</div>
+    <div style="margin-top:6px">Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
+  </div>
+</footer>
+<script src="/app.js?v=20261003d" defer></script>
+</body>
+</html>

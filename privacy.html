@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://poptanilabs.com/privacy.html">
+<title>Privacy Policy — SWP Calculator</title>
+<meta name="description" content="Privacy policy for the SWP calculator: what data is (and isn't) collected, and how advertising cookies work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261003e">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}</script>
+</head>
+<body>
+<header class="site"><div class="wrap nav">
+<a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+<nav><a href="/swp/">SWP Simulator</a><a href="/swp/#how">How it works</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="privacy.html" class="active">Privacy</a><a href="/contact.html">Contact</a><button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">AMOLED dark</span></button></nav>
+</div></header>
+<div class="wrap"><div class="card prose">
+<h1>Privacy Policy</h1>
+<p><i>Last updated: October 2026</i></p>
+<h2>What we collect</h2>
+<p><strong>Nothing about you.</strong> This calculator runs entirely in your browser. Your fund selections, amounts and dates are never sent to us, stored on a server, or tied to an identity. There are no accounts and no analytics that track your inputs.</p>
+<h2>What is stored on your device</h2>
+<ul>
+<li>Your <strong>theme preference</strong> (dark/light) in <code>localStorage</code>.</li>
+<li>A <strong>cached copy of the mutual-fund scheme list</strong> in <code>localStorage</code>, so the list loads faster on repeat visits. You can clear it any time via your browser's site-data settings.</li>
+</ul>
+<h2>Advertising</h2>
+<p>This site may display ads served by <strong>Google AdSense</strong>. Google and its partners may use cookies to serve ads based on your prior visits to this and other websites. Google's use of advertising cookies enables it and its partners to serve ads based on your visit to this site and/or other sites on the Internet. You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" rel="noopener">Google Ads Settings</a>. Learn more in <a href="https://policies.google.com/technologies/ads" rel="noopener">Google's advertising &amp; privacy documentation</a>.</p>
+<h2>Third-party data</h2>
+<p>NAV and scheme data are fetched from the public API at <a href="https://www.mfapi.in/" rel="noopener">mfapi.in</a>; chart rendering uses the Chart.js library from a CDN. Those services receive only the technical requests needed to deliver data and code — never your calculator inputs.</p>
+<h2>Contact</h2>
+<p>Questions about this policy: see the <a href="contact.html">contact page</a>.</p>
+</div></div>
+<footer class="site"><div class="wrap">
+<div class="fl"><a href="/swp/">SWP Simulator</a><a href="/about.html">About</a><a href="/blog/">Blog</a><a href="privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
+<div>Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
+</div></footer>
+<script>
+function paintThemeBtn(){const t=document.documentElement.getAttribute("data-theme")==="light";
+  const k=document.getElementById("themeKnob"),n=document.getElementById("themeName");
+  if(k)k.textContent=t?"🌙":"☀️";if(n)n.textContent=t?"AMOLED dark":"Light";}
+document.getElementById("themeBtn").addEventListener("click",()=>{
+  const r=document.documentElement,t=r.getAttribute("data-theme")==="light"?"dark":"light";
+  r.setAttribute("data-theme",t);try{localStorage.setItem("swp-theme",t);}catch(e){}paintThemeBtn();});
+paintThemeBtn();
+</script>
+</body></html>

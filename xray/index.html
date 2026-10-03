@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://poptanilabs.com/xray/">
+<title>Fund Overlap X-Ray — Indian Mutual Funds | Poptani Labs</title>
+<meta name="description" content="Free mutual fund overlap analyzer. X-ray 2–4 Indian mutual funds to find shared stocks, hidden concentration and true diversification — on real portfolio disclosures.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=20261003e">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="govbanner"><div class="wrap">● A free public tool &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Your data never leaves your browser</div></div>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+    <nav>
+      <a href="/swp/">SWP</a>
+      <a href="/sip/">SIP</a>
+      <a href="/xray/" class="active">X-Ray</a><a href="/blog/">Blog</a>
+      <a href="#how">How it works</a>
+      <a href="/about.html">About</a>
+      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">AMOLED dark</span></button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero slim">
+    <span class="kicker">Free · No sign-up · Real portfolio disclosures</span>
+    <h1>Fund overlap <span class="grad">X-Ray</span></h1>
+    <p>Own 3 funds but really own the same 20 stocks? Pick 2–4 Indian mutual funds and see exactly how much they overlap — shared stocks, weights, and hidden concentration.</p>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div class="card" id="pickCard">
+    <h2><span class="stepbadge">1</span> Pick 2–4 funds to X-ray <span class="sub">181 popular funds · latest monthly disclosures</span></h2>
+    <label for="fundSearch">Search funds</label>
+    <input type="text" id="fundSearch" placeholder="e.g. parag parikh" autocomplete="off">
+    <div class="hint" id="dataStatus" style="margin-top:8px">Loading fund holdings…</div>
+    <div id="fundResults" style="margin-top:8px"></div>
+    <h3 style="margin:18px 0 8px;font-size:1rem">Selected <span class="hint" id="selCount">(0 of 4)</span></h3>
+    <div class="chips" id="selChips"><span class="hint">Search above and tap a fund to add it.</span></div>
+    <div style="margin-top:16px"><button class="btn" id="runBtn" disabled>🔬 X-ray my funds</button></div>
+    <div id="pickError" class="err hidden" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card hidden" id="resultsCard">
+    <h2><span class="stepbadge">2</span> Overlap report</h2>
+    <div class="hint" id="repNote" style="margin-bottom:12px"></div>
+    <h3 style="font-size:1.05rem;margin:6px 0 8px">Pairwise overlap</h3>
+    <div class="hint" style="margin-bottom:8px">Overlap % = sum of the smaller weight for every shared stock. 100% would mean identical portfolios.</div>
+    <div class="tblwrap"><table class="sched" id="matrixTable"></table></div>
+    <div id="verdict" style="margin-top:12px"></div>
+
+    <h3 style="font-size:1.05rem;margin:22px 0 8px">Shared stocks <span class="hint" id="pairHint"></span></h3>
+    <div class="row" style="margin-bottom:8px">
+      <div style="max-width:320px">
+        <label for="pairSel">Compare pair</label>
+        <select id="pairSel"></select>
+      </div>
+    </div>
+    <div class="tblwrap"><table class="sched">
+      <thead><tr><th>Stock</th><th>Sector</th><th id="thA">Fund A</th><th id="thB">Fund B</th><th>Overlap weight</th></tr></thead>
+      <tbody id="sharedBody"></tbody>
+    </table></div>
+
+    <h3 style="font-size:1.05rem;margin:22px 0 8px">Combined top holdings <span class="hint">— average weight across your selected funds</span></h3>
+    <div class="tblwrap"><table class="sched">
+      <thead><tr><th>Stock</th><th>Sector</th><th>In how many funds</th><th>Avg weight</th></tr></thead>
+      <tbody id="topBody"></tbody>
+    </table></div>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div class="card" id="how">
+  <details class="howcard">
+    <summary><span>📖 Learn: what fund overlap is, how to use this &amp; FAQs</span><span class="tw">▾</span></summary>
+    <div class="prose" style="margin-top:10px">
+    <h2>What is fund overlap?</h2>
+    <p>Two funds "overlap" when they own the same stocks. A large-cap fund and a flexi-cap fund from different AMCs can easily share 40–60% of their portfolios — so holding both doesn't diversify you as much as the fund count suggests. Overlap is measured here as the <strong>sum of the smaller weight</strong> for every shared stock: if both funds hold 5% in HDFC Bank, that contributes 5% to overlap.</p>
+    <h2>How to use this X-ray</h2>
+    <ol>
+      <li><strong>Search and add</strong> 2–4 funds in Step 1.</li>
+      <li>Hit <strong>X-ray my funds</strong> — you get a pairwise overlap matrix, the full shared-stock list for any pair, and the combined top holdings across your selection.</li>
+    </ol>
+    <p>Holdings come from the funds' <strong>latest monthly portfolio disclosures</strong> (equity holdings only — derivatives, debt and cash excluded). Disclosures lag by a few weeks; treat this as a point-in-time X-ray.</p>
+    <div class="faq">
+      <h2>Frequently asked questions</h2>
+      <details><summary>How much overlap is "too much"?</summary><p>There's no magic number, but as a rule of thumb: above ~50% overlap, two funds are largely doing the same job — one of them is probably redundant. Below ~25%, they're genuinely different bets.</p></details>
+      <details><summary>Why do different funds own the same stocks?</summary><p>Large, liquid index heavyweights (HDFC Bank, Reliance, ICICI Bank…) dominate most Indian equity portfolios. Active managers still cluster around them, especially in large-cap and flexi-cap categories.</p></details>
+      <details><summary>Does overlap include foreign stocks and REITs?</summary><p>Yes — foreign equity, REITs and InvITs are included; futures, options, debt, and cash positions are excluded.</p></details>
+      <details><summary>Where does the holdings data come from?</summary><p>Monthly portfolio disclosures as published via Groww's fund pages, cleaned and normalized. Updated periodically — the report shows the disclosure date.</p></details>
+      <details><summary>Is my data stored anywhere?</summary><p>No. Everything runs in your browser — no accounts, no tracking of your picks. See the <a href="/privacy.html">privacy policy</a>.</p></details>
+    </div>
+    <div class="disclaimer"><strong>Disclaimer:</strong> This is an educational analysis tool, not financial advice. Mutual fund investments are subject to market risks — read all scheme documents carefully before investing. Holdings data may lag current portfolios.</div>
+    </div>
+  </details>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fl">
+      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
+    </div>
+    <div>Fund X-Ray — free mutual fund overlap analyzer for Indian mutual funds. Built with open tools.</div>
+    <div style="margin-top:6px">Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
+  </div>
+</footer>
+<script src="/xray.js?v=20261003d" defer></script>
+</body>
+</html>

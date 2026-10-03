@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://poptanilabs.com/">
+<title>Poptani Labs — Free tools, built with care</title>
+<meta name="description" content="Poptani Labs builds free, no-sign-up web tools — starting with an SWP simulator for Indian mutual funds. More handy tools on the way.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=20261003e">
+<!-- PAWAN: after Google AdSense approves poptanilabs.com, replace ca-pub-6679021817940576 with your publisher ID in app.js (ADSENSE_CLIENT) and on the /swp/ page. -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
+<style>
+  .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin:26px 0}
+  .proj{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;
+    transition:transform .15s, box-shadow .15s}
+  .proj:hover{transform:translateY(-3px)}
+  .proj.live:hover{box-shadow:0 16px 40px rgba(26,68,128,.20)}
+  .proj .emoji{font-size:2rem}
+  .proj h3{margin:0;font-size:1.25rem}
+  .proj p{margin:0;color:var(--muted);font-size:.95rem;flex:1}
+  .proj .go{align-self:flex-start;margin-top:8px}
+  .pill{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+    padding:5px 12px;border-radius:999px;background:rgba(62,155,79,.14);color:var(--good);border:1px solid currentColor}
+  .pill.soon{background:var(--card2);color:var(--muted);border-color:var(--line)}
+  .lab-about{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.lab-about{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+    <nav>
+      <a href="/swp/">SWP</a>
+      <a href="/sip/">SIP</a>
+      <a href="/xray/">X-Ray</a><a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/contact.html">Contact</a>
+      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">AMOLED dark</span></button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <svg class="hero-art" viewBox="0 0 220 220" aria-hidden="true">
+      <defs>
+        <radialGradient id="sun" cx="50%" cy="42%" r="65%">
+          <stop offset="0%" stop-color="#9CC3EE"/><stop offset="62%" stop-color="#4A90C9"/><stop offset="100%" stop-color="#1A4480"/>
+        </radialGradient>
+        <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7BA7D9"/><stop offset="100%" stop-color="#1A4480"/>
+        </linearGradient>
+      </defs>
+      <circle cx="150" cy="70" r="46" fill="url(#sun)" opacity="0.92"/>
+      <circle cx="150" cy="70" r="62" fill="none" stroke="#4A90C9" stroke-width="3" opacity="0.35"/>
+      <circle cx="150" cy="70" r="78" fill="none" stroke="#4A90C9" stroke-width="2" opacity="0.18"/>
+      <path d="M0 168 Q 55 138 110 162 T 220 156 L 220 220 L 0 220 Z" fill="url(#hill)" opacity="0.85"/>
+      <g font-family="Georgia,serif" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+        <circle cx="52" cy="120" r="20" fill="#1A4480" opacity="0.95"/><text x="52" y="128" font-size="20">₹</text>
+        <circle cx="92" cy="142" r="14" fill="#2C7FB8" opacity="0.95"/><text x="92" y="148" font-size="14">₹</text>
+        <circle cx="22" cy="150" r="11" fill="#005288" opacity="0.9"/><text x="22" y="155" font-size="11">₹</text>
+      </g>
+    </svg>
+    <span class="kicker">Free tools · No sign-up · No spam</span>
+    <h1>Small tools, <span class="grad">built with care.</span></h1>
+    <p>Poptani Labs is a tiny workshop for free web tools — starting with personal finance for the Indian market. Everything runs in your browser, nothing asks for an account, and every tool is free forever.</p>
+  </div>
+
+  <div class="card">
+    <h2>Projects <span class="sub">Pick a tool and get going</span></h2>
+    <div class="projects">
+      <div class="proj live">
+        <span class="pill">● Live</span>
+        <span class="emoji">🌱</span>
+        <h3>SWP Simulator</h3>
+        <p>Simulate a Systematic Withdrawal Plan across 37,000+ Indian mutual funds — withdrawals, remaining value, XIRR and a downloadable schedule, on live NAV history.</p>
+        <a class="btn go" href="/swp/" style="text-decoration:none">Open the simulator →</a>
+      </div>
+      <div class="proj live">
+        <span class="pill">● Live</span>
+        <span class="emoji">📈</span>
+        <h3>SIP Calculator</h3>
+        <p>Replay any monthly SIP on real NAV history — with annual step-up, XIRR, full schedule and CSV download, across 37,000+ Indian mutual funds.</p>
+        <a class="btn go" href="/sip/" style="text-decoration:none">Open the calculator →</a>
+      </div>
+      <div class="proj live">
+        <span class="pill">● Live</span>
+        <span class="emoji">🔬</span>
+        <h3>Fund Overlap X-Ray</h3>
+        <p>X-ray 2–4 mutual funds for shared stocks and hidden concentration — pairwise overlap, shared-stock tables and combined top holdings from real disclosures.</p>
+        <a class="btn go" href="/xray/" style="text-decoration:none">X-ray my funds →</a>
+      </div>
+      <div class="proj">
+        <span class="pill soon">○ Coming soon</span>
+        <span class="emoji">🔧</span>
+        <h3>Your idea here?</h3>
+        <p>More handy tools are on the workbench — calculators, planners and everyday utilities. Have something you'd love to see built?</p>
+        <a class="btn ghost go" href="/contact.html" style="text-decoration:none">Suggest a tool</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h2>From the blog <span class="sub">MF news in 5 minutes, twice a week</span></h2>
+    <p style="color:var(--muted);margin:0 0 6px"><strong>7 new fund offers in one week: the NFO flood, explained</strong> — six NFOs and one SIF opened within days: a life-cycle fund, India's first total-market index fund, a REIT index fund, and a long-short SIF. <a href="/blog/nfo-roundup-oct-2026/">Read the roundup →</a> · <a href="/blog/">All posts</a></p>
+  </div>
+
+  <div class="card">
+    <h2>About the lab <span class="sub">Why these tools exist</span></h2>
+    <div class="lab-about">
+      <p style="color:var(--muted);margin:0">Poptani Labs started with a simple frustration: good financial tools for Indian investors are either locked behind sign-ups or buried in spreadsheets. So we build the tools we wish existed — free, private, and honest about their math. The SWP Simulator was the first; it began life as a Python project and grew into this site, and the SIP Calculator and Fund X-Ray joined it.</p>
+      <p style="color:var(--muted);margin:0">Everything here is a work in progress and open to feedback. Found a bug or want a feature? <a href="/contact.html">Say hello</a> — every suggestion is read by a human.</p>
+    </div>
+    <div class="disclaimer"><strong>A note:</strong> tools on this site are educational aids, not financial advice. Mutual fund investments are subject to market risks — read all scheme documents carefully.</div>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fl">
+      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
+    </div>
+    <div>Poptani Labs — free tools, built with care. Educational content only; not financial advice.</div>
+  </div>
+</footer>
+<script>
+(function(){
+  var r=document.documentElement;
+  try{r.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}
+  function paint(){var t=r.getAttribute("data-theme")==="light";
+    var k=document.getElementById("themeKnob"),n=document.getElementById("themeName");
+    if(k)k.textContent=t?"🌙":"☀️"; if(n)n.textContent=t?"AMOLED dark":"Light";}
+  var b=document.getElementById("themeBtn"); paint();
+  b.addEventListener("click",function(){
+    var t=r.getAttribute("data-theme")==="light"?"dark":"light";
+    r.setAttribute("data-theme",t); try{localStorage.setItem("swp-theme",t);}catch(e){}
+    paint();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://poptanilabs.com/about.html">
+<title>About — Poptani Labs</title>
+<meta name="description" content="About the free SWP calculator for Indian mutual funds: what it does, where data comes from, and who built it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261003e">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}</script>
+</head>
+<body>
+<header class="site"><div class="wrap nav">
+<a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+<nav><a href="/swp/">SWP Simulator</a><a href="/swp/#how">How it works</a><a href="/blog/">Blog</a><a href="about.html" class="active">About</a><a href="/privacy.html">Privacy</a><a href="/contact.html">Contact</a><button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">AMOLED dark</span></button></nav>
+</div></header>
+<div class="wrap"><div class="card prose">
+<h1>About Poptani Labs</h1>
+<p><strong>Poptani Labs</strong> is a tiny workshop for free web tools — currently home to one project: a free, open <strong>Systematic Withdrawal Plan (SWP) simulator for Indian mutual funds</strong> (see it live at <a href="/swp/">poptanilabs.com/swp</a>). It replays history using actual daily NAVs: you choose a scheme, a lumpsum investment and a withdrawal plan, and it shows exactly how the corpus would have evolved — withdrawal by withdrawal — including the remaining value and the XIRR of the full cashflow.</p>
+<h2>Where the data comes from</h2>
+<p>Scheme lists and NAV histories come from <a href="https://www.mfapi.in/" rel="noopener">mfapi.in</a>, a free community API for Indian mutual fund NAVs. The scheme list refreshes daily; each scheme's full NAV history is fetched on demand when you select it.</p>
+<h2>How the math works</h2>
+<ul>
+<li>Your lumpsum buys units at the NAV prevailing on (or nearest before) your investment date.</li>
+<li>Each scheduled withdrawal redeems units at that date's NAV. If a withdrawal exceeds the balance, the plan pays out the remainder and ends.</li>
+<li>Remaining value is marked at the latest available NAV; XIRR is computed over the full cashflow (lumpsum out, withdrawals in) with Newton's method.</li>
+</ul>
+<h2>Who is behind it</h2>
+<p>Built by <a href="https://github.com/ppoptani9">Pawan Poptani</a> as an open learning project — first as a Python/Streamlit app, now as a fast static website. The original code lives on <a href="https://github.com/ppoptani9/Indian-MFs-SWP-Calculator">GitHub</a>.</p>
+<div class="disclaimer"><strong>Disclaimer:</strong> Educational tool only — not financial advice. Mutual fund investments are subject to market risks; read all scheme documents carefully.</div>
+</div></div>
+<footer class="site"><div class="wrap">
+<div class="fl"><a href="/swp/">SWP Simulator</a><a href="/about.html">About</a><a href="/blog/">Blog</a><a href="privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
+<div>Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
+</div></footer>
+<script>
+function paintThemeBtn(){const t=document.documentElement.getAttribute("data-theme")==="light";
+  const k=document.getElementById("themeKnob"),n=document.getElementById("themeName");
+  if(k)k.textContent=t?"🌙":"☀️";if(n)n.textContent=t?"AMOLED dark":"Light";}
+document.getElementById("themeBtn").addEventListener("click",()=>{
+  const r=document.documentElement,t=r.getAttribute("data-theme")==="light"?"dark":"light";
+  r.setAttribute("data-theme",t);try{localStorage.setItem("swp-theme",t);}catch(e){}paintThemeBtn();});
+paintThemeBtn();
+</script>
+</body></html>

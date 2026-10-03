@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://poptanilabs.com/sip/">
+<title>SIP Calculator — Indian Mutual Funds | Poptani Labs</title>
+<meta name="description" content="Free SIP calculator for Indian mutual funds. Simulate a Systematic Investment Plan on real NAV history — with annual step-up, XIRR, full schedule and downloadable results.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=20261003e">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="govbanner"><div class="wrap">● A free public tool &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Your data never leaves your browser</div></div>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+    <nav>
+      <a href="/swp/">SWP</a>
+      <a href="/sip/" class="active">SIP</a>
+      <a href="/xray/">X-Ray</a><a href="/blog/">Blog</a>
+      <a href="#how">How it works</a>
+      <a href="/about.html">About</a>
+      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">AMOLED dark</span></button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero slim">
+    <span class="kicker">Free · No sign-up · Live NAV data</span>
+    <h1>Watch your <span class="grad">SIP</span> bloom</h1>
+    <p>See what a monthly SIP would have grown into — on <b>real NAV history</b>, with optional annual step-up. Pick a scheme, set your plan, get the full run-down.</p>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div class="card" id="inputsCard">
+    <h2><span class="stepbadge">1</span> Your SIP plan <span class="sub">Set your investment details first — you'll pick the fund in Step 2</span></h2>
+    <div class="grid2">
+      <div>
+        <label for="sipAmt">Monthly SIP amount (₹)</label>
+        <input type="number" id="sipAmt" min="100" step="500" value="10000">
+        <div class="hint" id="sipAmtHint"></div>
+        <label for="sipDay">SIP date (day of month)</label>
+        <input type="number" id="sipDay" min="1" max="28" step="1" value="10">
+      </div>
+      <div>
+        <label for="sipStart">SIP start date</label>
+        <input type="date" id="sipStart">
+        <label for="sipEnd">SIP end date</label>
+        <input type="date" id="sipEnd">
+        <label for="stepUp">Annual step-up (%) <span class="hint" style="display:inline">— SIP grows by this much every 12 months</span></label>
+        <input type="number" id="stepUp" min="0" max="100" step="1" value="10">
+      </div>
+    </div>
+    <div id="simError" class="err hidden"></div>
+  </div>
+
+  <div class="card" id="fundCard">
+    <h2><span class="stepbadge">2</span> Select a mutual fund scheme <span class="sub">Search, or tap a popular fund — every chip is verified against the scheme list</span></h2>
+    <div class="row">
+      <div>
+        <label for="fundSearch">Search fund (partial match allowed)</label>
+        <input type="text" id="fundSearch" placeholder="e.g. parag parikh flexi cap" autocomplete="off">
+      </div>
+      <div style="max-width:220px">
+        <label for="amcFilter">Filter by AMC</label>
+        <select id="amcFilter"><option value="">All AMCs</option></select>
+      </div>
+    </div>
+    <div class="hint hidden" id="fundStatus" style="margin-top:8px">Loading scheme list…</div>
+    <div class="chips" id="quickPicks">
+      <button class="chip" data-q="parag parikh flexi cap">Parag Parikh Flexi Cap</button>
+      <button class="chip" data-q="hdfc flexi cap">HDFC Flexi Cap</button>
+      <button class="chip" data-q="quant small cap">Quant Small Cap</button>
+      <button class="chip" data-q="axis large cap">Axis Large Cap</button>
+      <button class="chip" data-q="nippon india small cap">Nippon India Small Cap</button>
+    </div>
+    <div id="fundResults" style="margin-top:8px"><div style="padding:12px" class="hint">Type to search 37,000+ schemes…</div></div>
+    <div id="schemeCard" class="hidden">
+      <div class="scheme">
+        <div class="nm" id="schemeName"></div>
+        <div class="mt" id="schemeMeta"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="runCard">
+    <h2><span class="stepbadge">3</span> Review &amp; run <span class="sub">The simulation runs only when every item below is confirmed</span></h2>
+    <div id="readiness" class="readiness"></div>
+    <div style="margin-top:16px"><button class="btn" id="runBtn" disabled>▶ Run SIP Simulation</button></div>
+  </div>
+
+  <div class="card hidden" id="resultsCard">
+    <h2><span class="stepbadge">4</span> Simulation results</h2>
+    <div class="metrics" id="metrics"></div>
+    <h2>Investment Schedule &amp; Run-down</h2>
+    <div class="hint" id="schedNote" style="margin-bottom:8px"></div>
+    <div class="tblwrap"><table class="sched">
+      <thead><tr><th>SIP date</th><th>NAV date used</th><th>NAV (₹)</th><th>Invested</th><th>Units bought</th><th>Total units</th><th>Invested so far</th></tr></thead>
+      <tbody id="schedBody"></tbody>
+    </table></div>
+    <div class="pager hidden" id="schedPager">
+      <button id="pgPrev">← Prev</button>
+      <span class="pg" id="pgInfo"></span>
+      <button id="pgNext">Next →</button>
+    </div>
+    <div style="margin-top:12px"><button class="btn ghost" id="csvBtn">⬇ Download schedule (CSV)</button></div>
+    <h2 style="margin-top:22px">Charts</h2>
+    <div id="chartWrap" style="position:relative;height:360px"><canvas id="chart"></canvas></div>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div class="card" id="how">
+  <details class="howcard">
+    <summary><span>📖 Learn: what is SIP, how to use this, FAQs &amp; tax notes</span><span class="tw">▾</span></summary>
+    <div class="prose" style="margin-top:10px">
+    <h2>What is SIP?</h2>
+    <p>A <strong>Systematic Investment Plan (SIP)</strong> invests a fixed sum in a mutual fund at regular intervals — usually monthly. It automates rupee-cost averaging: you buy more units when NAVs are low and fewer when they're high, smoothing out market timing.</p>
+    <h2>How to use this calculator</h2>
+    <ol>
+      <li>Set your <strong>monthly SIP amount</strong>, the <strong>day of the month</strong>, and your <strong>start/end dates</strong> in Step 1.</li>
+      <li>Optionally add an <strong>annual step-up</strong> — your SIP grows by that percent every 12 months, mirroring salary hikes.</li>
+      <li><strong>Search and select</strong> your mutual fund scheme in Step 2.</li>
+      <li>Hit <strong>Run SIP Simulation</strong> — the calculator replays history using actual NAVs: each instalment buys units at the prevailing NAV, and you get total invested, current value, gains and the <strong>XIRR</strong> of the whole cashflow.</li>
+    </ol>
+    <p>Instalments use the <strong>nearest previous available NAV</strong> for each date (markets are closed on weekends and holidays). The SIP day is clamped to the month's length (e.g. the 30th becomes Feb 28).</p>
+    <h2>SIP taxation in India — the short version</h2>
+    <p>Every SIP instalment is a separate investment with its own holding period. As a rough guide for units bought on or after 23 July 2024: equity-oriented funds held over 12 months face <strong>12.5% LTCG</strong> above ₹1.25 lakh/year; shorter holdings face <strong>20% STCG</strong>. Debt-oriented fund gains are taxed at your <strong>slab rate</strong>. Tax rules change — treat this as orientation, not tax advice.</p>
+    <div class="faq">
+      <h2>Frequently asked questions</h2>
+      <details><summary>What does the step-up do to my returns?</summary><p>Step-up increases how much you invest, not the return rate — but because you invest more in later years, it substantially grows the final corpus. A 10% annual step-up on a 10-year SIP roughly doubles total invested versus a flat SIP.</p></details>
+      <details><summary>Which SIP date is best?</summary><p>Over long periods the SIP date barely matters — studies repeatedly show the difference between dates is noise. Pick the date right after your salary credit so you never miss an instalment.</p></details>
+      <details><summary>What is XIRR and why show it?</summary><p>XIRR is the annualised return of irregular cashflows — the single number that accounts for <em>when</em> each instalment went in. It's the fair way to compare a SIP against a lumpsum or another fund.</p></details>
+      <details><summary>Where does the NAV data come from?</summary><p>Live from <a href="https://www.mfapi.in/" rel="noopener">mfapi.in</a>, a free mutual-fund NAV API. Scheme lists refresh daily; NAV histories are fetched per scheme on demand.</p></details>
+      <details><summary>Is my data stored anywhere?</summary><p>No. Everything runs in your browser — no accounts, no tracking of your inputs. See the <a href="/privacy.html">privacy policy</a>.</p></details>
+    </div>
+    <div class="disclaimer"><strong>Disclaimer:</strong> This is an educational simulation tool, not financial advice. Mutual fund investments are subject to market risks — read all scheme documents carefully before investing. Past NAV performance does not guarantee future results.</div>
+    </div>
+  </details>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fl">
+      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
+    </div>
+    <div>SIPCalc — free Systematic Investment Plan calculator for Indian mutual funds. NAV data: mfapi.in. Built with open tools.</div>
+    <div style="margin-top:6px">Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
+  </div>
+</footer>
+<script src="/sip.js?v=20261003d" defer></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://poptanilabs.com/contact.html">
+<title>Contact — SWP Calculator</title>
+<meta name="description" content="How to reach the builder of the free SWP calculator for Indian mutual funds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261003e">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}</script>
+</head>
+<body>
+<header class="site"><div class="wrap nav">
+<a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+<nav><a href="/swp/">SWP Simulator</a><a href="/swp/#how">How it works</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/privacy.html">Privacy</a><a href="contact.html" class="active">Contact</a><button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">AMOLED dark</span></button></nav>
+</div></header>
+<div class="wrap"><div class="card prose">
+<h1>Contact</h1>
+<p>Found a bug, have a feature idea, or want to say hi?</p>
+<ul>
+<li>🐛 <strong>Bug reports &amp; feature requests:</strong> open an issue on the <a href="https://github.com/ppoptani9/Indian-MFs-SWP-Calculator/issues">GitHub repository</a> — that's the fastest way to reach the builder.</li>
+<li>👤 <strong>GitHub profile:</strong> <a href="https://github.com/ppoptani9">github.com/ppoptani9</a></li>
+</ul>
+<p class="hint">Please don't share personal financial details (account numbers, folio numbers) — they're never needed to use or improve this calculator.</p>
+</div></div>
+<footer class="site"><div class="wrap">
+<div class="fl"><a href="/swp/">SWP Simulator</a><a href="/about.html">About</a><a href="/blog/">Blog</a><a href="privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
+<div>Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
+</div></footer>
+<script>
+function paintThemeBtn(){const t=document.documentElement.getAttribute("data-theme")==="light";
+  const k=document.getElementById("themeKnob"),n=document.getElementById("themeName");
+  if(k)k.textContent=t?"🌙":"☀️";if(n)n.textContent=t?"AMOLED dark":"Light";}
+document.getElementById("themeBtn").addEventListener("click",()=>{
+  const r=document.documentElement,t=r.getAttribute("data-theme")==="light"?"dark":"light";
+  r.setAttribute("data-theme",t);try{localStorage.setItem("swp-theme",t);}catch(e){}paintThemeBtn();});
+paintThemeBtn();
+</script>
+</body></html>

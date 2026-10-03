@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://poptanilabs.com/blog/">
+<title>Blog — MF news in 5 minutes | Poptani Labs</title>
+<meta name="description" content="Twice a week: the latest Indian mutual fund news, summarized with credible sources — plus a rhyme from financial history at the end of every post.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=20261003c">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
+<style>
+  .postlist{display:grid;gap:16px;margin:22px 0}
+  .post{display:block;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 24px;text-decoration:none;color:inherit;box-shadow:var(--shadow);transition:transform .15s}
+  .post:hover{transform:translateY(-3px)}
+  .post .date{font-size:.8rem;color:var(--muted);font-weight:600;letter-spacing:.4px}
+  .post h2{margin:8px 0;font-size:1.3rem}
+  .post p{margin:0;color:var(--muted);font-size:.95rem}
+  .post .more{display:inline-block;margin-top:10px;font-weight:700;color:var(--accent,#c8742c)}
+</style>
+</head>
+<body>
+<div class="govbanner"><div class="wrap">● A free public tool &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Your data never leaves your browser</div></div>
+<header class="site"><div class="wrap nav">
+<a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+<nav>
+  <a href="/swp/">SWP</a>
+  <a href="/sip/">SIP</a>
+  <a href="/xray/">X-Ray</a>
+  <a href="/blog/" class="active">Blog</a>
+  <a href="/about.html">About</a>
+  <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">AMOLED dark</span></button>
+</nav>
+</div></header>
+
+<div class="wrap">
+  <div class="hero slim">
+    <span class="kicker">Twice a week · 5-minute reads</span>
+    <h1>The Lab <span class="grad">Notebook</span></h1>
+    <p>The latest Indian mutual fund news — summarized in plain language, with credible sources linked under every story. And at the end of each post, a rhyme from financial history: the past episode this week's news echoes.</p>
+  </div>
+
+  <div class="postlist">
+    <a class="post" href="/blog/nfo-roundup-oct-2026/">
+      <span class="date">October 6, 2026 · Weekly roundup</span>
+      <h2>7 new fund offers in one week: the NFO flood, explained</h2>
+      <p>Six NFOs and one Specialised Investment Fund opened in a single week — a life-cycle fund, India's first total-market index fund, a REIT index fund, and a long-short SIF. What each one is, who it's for, and the key dates.</p>
+      <span class="more">Read the roundup →</span>
+    </a>
+  </div>
+
+  <div class="card">
+    <h2>How we source <span class="sub">Credible, and copyright-clean</span></h2>
+    <ul>
+      <li><strong>Primary sources first:</strong> SEBI press releases, AMFI data, and the fund houses' own scheme documents whenever possible.</li>
+      <li><strong>Reputable press second:</strong> established financial publications — always linked, never copied. Every story is summarized in our own words.</li>
+      <li><strong>Facts are free:</strong> dates, minimum investments, and NAVs can't be copyrighted — but sentences can be, so we never lift them.</li>
+      <li><strong>Our charts are ours:</strong> any data visualization is computed from public NAV histories, not screenshotted from anyone.</li>
+    </ul>
+    <div class="disclaimer"><strong>Disclaimer:</strong> Educational summaries only — not financial advice. Mutual fund investments are subject to market risks; read all scheme documents carefully before investing.</div>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+</div>
+
+<footer class="site"><div class="wrap">
+<div class="fl"><a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
+<div>Educational content only — not financial advice. Mutual fund investments are subject to market risks.</div>
+</div></footer>
+<script>
+function paintThemeBtn(){const t=document.documentElement.getAttribute("data-theme")==="light";
+  const k=document.getElementById("themeKnob"),n=document.getElementById("themeName");
+  if(k)k.textContent=t?"🌙":"☀️";if(n)n.textContent=t?"AMOLED dark":"Light";}
+document.getElementById("themeBtn").addEventListener("click",()=>{
+  const r=document.documentElement,t=r.getAttribute("data-theme")==="light"?"dark":"light";
+  r.setAttribute("data-theme",t);try{localStorage.setItem("swp-theme",t);}catch(e){}paintThemeBtn();});
+paintThemeBtn();
+</script>
+</body>
+</html>

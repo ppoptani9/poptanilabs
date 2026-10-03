@@ -1,0 +1,17 @@
+# release artifacts
+*.zip
+poptanilabs-site.zip
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# python tooling (local QA only)
+.venv/
+__pycache__/
+*.pyc
+
+# node (unused today, kept for future tooling)
+node_modules/

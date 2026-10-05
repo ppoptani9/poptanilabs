@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0F5D4E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg?v=20261005" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png?v=20261005" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png?v=20261005" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261005">
+<link rel="canonical" href="https://poptanilabs.com/pdf/split/">
+<title>Split PDF — Extract Pages Online Free | Poptani Labs</title>
+<meta name="description" content="Split a PDF by page ranges into separate files, or extract pages into one PDF. Free, in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=20261005d">
+<script src="/pdf/pdfapp.js?v=1"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="govbanner"><div class="wrap">● A free public tool &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Your files never leave your browser</div></div>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/" aria-label="Poptani Labs home"><img class="brand-mark" src="/logo-mark.svg" alt="" width="34" height="34"><img class="brand-mark brand-mark-dark" src="/logo-mark-dark.svg?v=2" alt="" width="34" height="34"><span class="brand-name">Poptani <span>Labs</span></span></a>
+    <nav>
+      <div class="navdrop"><button class="navdrop-btn active" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn active" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/" class="active"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/"><b>Birthday Cosmos</b><small>Your birthday's NASA picture of the day</small></a></div></div></div></div><a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span><span class="lname" id="themeName">Dark</span></button>
+    </nav>
+  </div>
+</header>
+<div class="wrap">
+  <div class="hero slim">
+    <span class="kicker">Free · No sign-up · 100% in your browser</span>
+    <h1>Split <span class="grad">PDF.</span></h1>
+    <p>Pull pages out of a PDF — one file per range, or a single PDF of just the pages you pick.</p>
+  </div>
+  <div class="card">
+<div class="dz" id="dz" tabindex="0" role="button" aria-label="Choose files">
+      <div class="dz-t"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-4px"><path d="M12 16V4"/><path d="m6 10 6-6 6 6"/><path d="M4 20h16"/></svg> Drop your PDF here, or click to browse</div>
+      <div class="dz-s">Files stay on your device — nothing is uploaded</div>
+    </div>
+    <div id="fileList"></div>
+    <div class="row" style="margin-top:14px">
+      <div><label for="ranges">Page ranges</label>
+        <input type="text" id="ranges" placeholder="e.g. 1-3, 5, 8-10  (use - at the end for 'to the last page')">
+        <div class="hint">Comma-separated. A trailing dash means "to the last page".</div></div>
+      <div><label for="mode">Output</label>
+        <select id="mode"><option value="parts">One PDF per range</option><option value="one">Single PDF of all selected pages</option></select></div>
+    </div>
+    <div id="errBox" class="err hidden" style="margin-top:12px"></div>
+    <div id="doneBox" class="pdfdone hidden"></div>
+    <div style="margin-top:16px"><button class="btn" id="runBtn">Split PDF</button></div>  </div>
+  <div class="card">
+    <h2>Good to know</h2>
+    <details><summary>Do my files leave my browser?</summary><p>No. Every PDF tool on this page runs 100% on your device using open-source libraries (pdf-lib, pdf.js). Nothing is uploaded, stored, or tracked. See the <a href="/privacy.html">privacy policy</a>.</p></details>
+    <details><summary>Is there a file size limit?</summary><p>Only what your device's memory allows. Very large PDFs (hundreds of MB) may be slow on phones — for those, a desktop browser works best.</p></details>
+    <details><summary>What about password-protected PDFs?</summary><p>Encrypted PDFs can't be processed in the browser — you'll see a clear error. Unlock the file first, then use the tool.</p></details>
+  </div>
+<script>
+
+async function needLibs(){
+  try{ return await PDFApp.libs(); }
+  catch(e){ PDFApp.showError(errBox, "Could not load the PDF engine: " + e.message); throw e; }
+}
+function fail(e){
+  console.error(e);
+  const m = /encrypt/i.test(String(e && e.message)) ? "This PDF is password-protected — unlock it first, then try again."
+        : (e && e.message) || String(e);
+  PDFApp.showError(errBox, m);
+}
+
+const dz = document.getElementById("dz"), list = document.getElementById("fileList");
+const errBox = document.getElementById("errBox"), doneBox = document.getElementById("doneBox");
+const runBtn = document.getElementById("runBtn");
+let cur = null;
+PDFApp.dropzone(dz, async (fs) => {
+  PDFApp.hideError(errBox);
+  const f = fs[0];
+  if(!f) return;
+  if(!/\.pdf$/i.test(f.name) && f.type !== "application/pdf"){ fail(new Error("Please choose a PDF file.")); return; }
+  let PDFLib;
+  try{ ({PDFLib} = await needLibs()); }catch(e){ return; }
+  try{
+    const bytes = await PDFApp.readAsBytes(f);
+    const doc = await PDFLib.PDFDocument.load(bytes, {ignoreEncryption:true});
+    cur = {file:f, bytes, pages:doc.getPageCount()};
+    list.innerHTML = "";
+    list.appendChild(PDFApp.fileRow(f.name, cur.pages + " pages \u00B7 " + PDFApp.fmtSize(f.size), () => { cur = null; list.innerHTML = ""; }));
+  }catch(e){ fail(e); }
+}, ".pdf,application/pdf");
+runBtn.addEventListener("click", () => PDFApp.withProgress(runBtn, "Splitting", async () => {
+  PDFApp.hideError(errBox); doneBox.classList.add("hidden");
+  try{
+    if(!cur) throw new Error("Choose a PDF file first.");
+    const {PDFLib} = await needLibs();
+    const mode = document.getElementById("mode").value;
+    const parts = String(document.getElementById("ranges").value).split(",").map(s=>s.trim()).filter(Boolean);
+    if(!parts.length) throw new Error("Enter at least one page or range (e.g. 1-3, 5).");
+    const groups = mode === "one"
+      ? [parts.flatMap(p => PDFApp.parseRanges(p, cur.pages))]
+      : parts.map(p => PDFApp.parseRanges(p, cur.pages));
+    const src = await PDFLib.PDFDocument.load(cur.bytes, {ignoreEncryption:true});
+    let n = 0;
+    for(const g of groups){
+      const uniq = [...new Set(g)].sort((a,b)=>a-b);
+      const out = await PDFLib.PDFDocument.create();
+      (await out.copyPages(src, uniq)).forEach(p => out.addPage(p));
+      const bytes = await out.save();
+      const base = cur.file.name.replace(/\.pdf$/i, "");
+      PDFApp.download(bytes, mode === "one" ? base + "-extract.pdf" : `${base}-part${++n}.pdf`, "application/pdf");
+      await new Promise(r => setTimeout(r, 400));
+    }
+    PDFApp.showDone(doneBox, `<b>Done.</b> Created ${groups.length} PDF${groups.length>1?"s":""} — downloads started.`);
+  }catch(e){ fail(e); }
+}));
+
+</script>
+<script>
+(function(){var r=document.documentElement;
+try{r.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}
+function paint(){var t=r.getAttribute("data-theme")==="light";
+var k=document.getElementById("themeKnob"),n=document.getElementById("themeName");
+if(k)k.innerHTML=t?'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>':'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'; if(n)n.textContent=t?"Dark":"Light";}
+var b=document.getElementById("themeBtn"); paint();
+b.addEventListener("click",function(){var t=r.getAttribute("data-theme")==="light"?"dark":"light";
+r.setAttribute("data-theme",t); try{localStorage.setItem("swp-theme",t);}catch(e){} paint();});})();
+</script></div>
+<footer class="site">
+  <div class="wrap">
+    <div class="fl">
+      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/pdf/">PDF Tools</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
+    </div>
+    <div>PDF tools — free, private PDF utilities that run entirely in your browser. Your files never leave your device. Built with open tools.</div>
+    <div class="tagline">ideas worth building.</div>
+  </div>
+</footer>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js").catch(function(){});}</script>
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0F5D4E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg?v=20261005" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png?v=20261005" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png?v=20261005" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261005">
+<link rel="canonical" href="https://poptanilabs.com/pdf/sign/">
+<title>Sign PDF — Add Your Signature Online Free | Poptani Labs</title>
+<meta name="description" content="Sign a PDF in your browser: draw, type, or upload your signature and place it on any page. Free, no sign-up, files never leave your device.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=20261005d">
+<script src="/pdf/pdfapp.js?v=1"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
+<style>
+@font-face{font-family:"Caveat";font-style:normal;font-weight:700;font-display:swap;
+  src:url("/vendor/fonts/caveat-700.woff2") format("woff2")}
+.signtabs{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.signtabs .chip{cursor:pointer;border:1px solid var(--line);background:var(--card2);color:var(--ink);
+  border-radius:999px;padding:9px 20px;font-weight:700;font-size:.9rem}
+.signtabs .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+#drawCanvas{width:100%;max-width:620px;height:230px;border:2px dashed var(--line);border-radius:12px;
+  background:#fff;touch-action:none;cursor:crosshair;display:block}
+.sigrow{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+#sigPreview{max-width:280px;max-height:90px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:6px}
+#pageWrap{position:relative;display:inline-block;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  background:#fff;max-width:100%}
+#pageCanvas{display:block;max-width:100%}
+#sigOverlay{position:absolute;border:2px dashed var(--accent);border-radius:6px;cursor:move;touch-action:none;
+  background:rgba(255,255,255,.35)}
+#sigOverlay img{display:block;width:100%;height:auto;pointer-events:none}
+.pagenav{display:flex;gap:10px;align-items:center;margin:12px 0;flex-wrap:wrap}
+.applyrow{display:flex;gap:14px;align-items:center;margin:14px 0;flex-wrap:wrap}
+.applyrow label{display:flex;gap:6px;align-items:center;font-size:.92rem;cursor:pointer}
+input[type=range]{accent-color:var(--accent)}
+#typeName{width:100%;max-width:420px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;
+  font-size:1.05rem;background:var(--card);color:var(--ink)}
+.stephead{display:flex;align-items:center;gap:10px}
+.stepnum{background:var(--accent);color:#fff;font-weight:800;border-radius:50%;width:30px;height:30px;
+  display:inline-flex;align-items:center;justify-content:center;flex:none}
+.applied{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.applied .chip{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);
+  border-radius:999px;padding:6px 8px 6px 14px;font-size:.85rem;background:var(--card2)}
+.applied .chip button{border:none;background:var(--danger,#c0392b);color:#fff;border-radius:50%;
+  width:22px;height:22px;cursor:pointer;font-weight:800;line-height:1}
+</style>
+</head>
+<body>
+<div class="govbanner"><div class="wrap">● A free public tool &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Your files never leave your browser</div></div>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/" aria-label="Poptani Labs home"><img class="brand-mark" src="/logo-mark.svg" alt="" width="34" height="34"><img class="brand-mark brand-mark-dark" src="/logo-mark-dark.svg?v=2" alt="" width="34" height="34"><span class="brand-name">Poptani <span>Labs</span></span></a>
+    <nav>
+      <div class="navdrop"><button class="navdrop-btn active" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn active" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/" class="active"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/"><b>Birthday Cosmos</b><small>Your birthday's NASA picture of the day</small></a></div></div></div></div><a href="/blog/">Blog</a>
+      <a href="/about.html">About</a>
+      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span><span class="lname" id="themeName">Dark</span></button>
+    </nav>
+  </div>
+</header>
+<div class="wrap">
+  <div class="hero slim">
+    <span class="kicker">Free · No sign-up · 100% in your browser</span>
+    <h1>Sign <span class="grad">PDF.</span></h1>
+    <p>Draw, type, or upload your signature — then drag it onto any page of your PDF. All on your device.</p>
+  </div>
+
+  <div class="card">
+    <div class="stephead"><span class="stepnum">1</span><h2 style="margin:0">Add your PDF</h2></div>
+    <div class="dz" id="dz" tabindex="0" role="button" aria-label="Choose a PDF file" style="margin-top:12px">
+      <div class="dz-t"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-4px"><path d="M12 16V4"/><path d="m6 10 6-6 6 6"/><path d="M4 20h16"/></svg> Drop your PDF here, or click to browse</div>
+      <div class="dz-s">Files stay on your device — nothing is uploaded</div>
+    </div>
+    <div id="fileList"></div>
+    <div id="errBox" class="err hidden" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card hidden" id="step2">
+    <div class="stephead"><span class="stepnum">2</span><h2 style="margin:0">Create your signature</h2></div>
+    <div class="signtabs" role="tablist">
+      <button type="button" class="chip on" data-tab="draw">Draw</button>
+      <button type="button" class="chip" data-tab="type">Type</button>
+      <button type="button" class="chip" data-tab="upload">Upload</button>
+    </div>
+    <div id="tab-draw">
+      <canvas id="drawCanvas" width="900" height="345"></canvas>
+      <div class="sigrow"><button type="button" class="chip" id="clearDraw">Clear</button>
+        <span style="color:var(--muted);font-size:.88rem">Sign with your mouse, finger, or stylus.</span></div>
+    </div>
+    <div id="tab-type" class="hidden">
+      <input id="typeName" type="text" placeholder="Type your full name" maxlength="60" autocomplete="off">
+      <div class="sigrow"><button type="button" class="btn" id="renderType" style="padding:10px 22px">Render signature</button></div>
+      <div style="color:var(--muted);font-size:.88rem;margin-top:6px">Rendered in a handwriting style, in dark blue ink.</div>
+    </div>
+    <div id="tab-upload" class="hidden">
+      <label class="btn" style="padding:10px 22px;cursor:pointer">Choose signature image
+        <input id="uploadSig" type="file" accept="image/png,image/jpeg,image/webp" style="display:none"></label>
+      <div style="color:var(--muted);font-size:.88rem;margin-top:8px">A photo or scan of your signature on a light background works best — transparency is preserved for PNGs.</div>
+    </div>
+    <div class="sigrow" style="margin-top:16px">
+      <img id="sigPreview" alt="Signature preview" class="hidden">
+      <button type="button" class="btn" id="useSig">Use this signature →</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="step3">
+    <div class="stephead"><span class="stepnum">3</span><h2 style="margin:0">Place it on the document</h2></div>
+    <div class="pagenav">
+      <button type="button" class="chip" id="prevPage">← Prev</button>
+      <b id="pageLabel">Page 1 of 1</b>
+      <button type="button" class="chip" id="nextPage">Next →</button>
+    </div>
+    <div id="pageWrap">
+      <canvas id="pageCanvas"></canvas>
+      <div id="sigOverlay" class="hidden"><img id="sigOverlayImg" alt="Signature"></div>
+    </div>
+    <div class="applyrow">
+      <span><b>Size</b></span>
+      <input type="range" id="sigSize" min="70" max="420" value="210" step="5" aria-label="Signature size">
+      <span><b>Apply to</b></span>
+      <label><input type="radio" name="applyTo" value="page" checked> This page</label>
+      <label><input type="radio" name="applyTo" value="all"> All pages</label>
+      <label><input type="radio" name="applyTo" value="last"> Last page</label>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button type="button" class="btn" id="addSigBtn">Add signature to document</button>
+      <button type="button" class="chip" id="resetBtn">Start over</button>
+    </div>
+    <div class="applied" id="appliedList"></div>
+    <div id="doneBox" class="pdfdone hidden" style="margin-top:12px"></div>
+    <div style="margin-top:12px" class="hidden" id="dlWrap"><button type="button" class="btn" id="dlBtn">Download signed PDF</button></div>
+  </div>
+
+  <div class="card">
+    <h2>Good to know</h2>
+    <details><summary>Is this signature legally valid?</summary><p>It creates a standard electronic signature — accepted for most everyday documents like contracts, offer letters, consent forms, and internal approvals. Banks, courts, and some government filings require <i>certified digital signatures</i> (with a cryptographic certificate); this tool doesn't create those.</p></details>
+    <details><summary>Do my files leave my browser?</summary><p>No. Signing runs 100% on your device using open-source libraries (pdf-lib, pdf.js). Nothing is uploaded, stored, or tracked. See the <a href="/privacy.html">privacy policy</a>.</p></details>
+    <details><summary>What about password-protected PDFs?</summary><p>Encrypted PDFs can't be processed in the browser — you'll see a clear error. Unlock the file first, then sign it.</p></details>
+  </div>
+</div>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const dz=$("dz"), fileList=$("fileList"), errBox=$("errBox"), doneBox=$("doneBox");
+const step2=$("step2"), step3=$("step3");
+let PDFLib=null, pdfjsLib=null;
+let origBytes=null, origName="document.pdf", workingDoc=null;
+let curPage=1, pageCount=0, pageScale=1;
+let sigDataURL=null;
+let applied=[]; // {sigURL, xPt, yTopPt, wPt, hPt, targets:[indices], label}
+
+function fail(e){
+  console.error(e);
+  const m=/encrypt/i.test(String(e&&e.message))?"This PDF is password-protected — unlock it first, then try again."
+    :(e&&e.message)||String(e);
+  PDFApp.showError(errBox,m);
+}
+async function needLibs(){
+  try{ return await PDFApp.libs(); }
+  catch(e){ PDFApp.showError(errBox,"Could not load the PDF engine: "+e.message); throw e; }
+}
+function b64ToBytes(dataURL){
+  const bin=atob(dataURL.split(",")[1]);
+  const u8=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
+  return u8;
+}
+
+/* ---------- signature creation ---------- */
+const dc=$("drawCanvas"), dctx=dc.getContext("2d");
+(function initDraw(){
+  let drawing=false,last=null;
+  const pos=e=>{const r=dc.getBoundingClientRect();return{x:(e.clientX-r.left)*dc.width/r.width,y:(e.clientY-r.top)*dc.height/r.height};};
+  dc.addEventListener("pointerdown",e=>{drawing=true;last=pos(e);try{dc.setPointerCapture(e.pointerId);}catch(_){}e.preventDefault();});
+  dc.addEventListener("pointermove",e=>{if(!drawing)return;const p=pos(e);
+    dctx.strokeStyle="#1b2a7a";dctx.lineWidth=7;dctx.lineCap="round";dctx.lineJoin="round";
+    dctx.beginPath();dctx.moveTo(last.x,last.y);dctx.lineTo(p.x,p.y);dctx.stroke();last=p;});
+  const stop=()=>{drawing=false;updateSigPreview();};
+  dc.addEventListener("pointerup",stop);dc.addEventListener("pointercancel",stop);
+})();
+$("clearDraw").addEventListener("click",()=>{dctx.clearRect(0,0,dc.width,dc.height);updateSigPreview();});
+
+document.querySelectorAll(".signtabs .chip").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".signtabs .chip").forEach(b=>b.classList.remove("on"));
+    btn.classList.add("on");
+    ["draw","type","upload"].forEach(t=>$("tab-"+t).classList.toggle("hidden",t!==btn.dataset.tab));
+  });
+});
+$("renderType").addEventListener("click",async()=>{
+  try{await document.fonts.load('700 110px Caveat').catch(()=>{});}catch(_){}
+  const name=$("typeName").value.trim()||"Your Name";
+  dctx.clearRect(0,0,dc.width,dc.height);
+  let size=130;
+  dctx.fillStyle="#1b2a7a";dctx.textAlign="center";dctx.textBaseline="middle";
+  do{ dctx.font=`700 ${size}px Caveat, "Brush Script MT", "Segoe Script", cursive`; size-=8; }while(dctx.measureText(name).width>dc.width-60&&size>34);
+  dctx.fillText(name,dc.width/2,dc.height/2+6);
+  updateSigPreview();
+});
+$("typeName").addEventListener("keydown",e=>{if(e.key==="Enter")$("renderType").click();});
+$("uploadSig").addEventListener("change",()=>{
+  const f=$("uploadSig").files[0];if(!f)return;
+  const img=new Image();
+  img.onload=()=>{
+    dctx.clearRect(0,0,dc.width,dc.height);
+    const s=Math.min(dc.width/img.width,dc.height/img.height,1)*0.94;
+    const w=img.width*s,h=img.height*s;
+    dctx.drawImage(img,(dc.width-w)/2,(dc.height-h)/2,w,h);
+    URL.revokeObjectURL(img.src);updateSigPreview();
+  };
+  img.onerror=()=>fail(new Error("Could not read that image."));
+  img.src=URL.createObjectURL(f);
+});
+function trimmedCanvas(){
+  const w=dc.width,h=dc.height,data=dctx.getImageData(0,0,w,h).data;
+  let x0=w,y0=h,x1=-1,y1=-1;
+  for(let y=0;y<h;y+=2)for(let x=0;x<w;x+=2){
+    if(data[(y*w+x)*4+3]>14){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}
+  }
+  if(x1<0)return null;
+  const pad=16;x0=Math.max(0,x0-pad);y0=Math.max(0,y0-pad);x1=Math.min(w-1,x1+pad);y1=Math.min(h-1,y1+pad);
+  const c=document.createElement("canvas");c.width=x1-x0+1;c.height=y1-y0+1;
+  c.getContext("2d").drawImage(dc,x0,y0,c.width,c.height,0,0,c.width,c.height);
+  return c;
+}
+function updateSigPreview(){
+  const t=trimmedCanvas(),pv=$("sigPreview");
+  if(t){pv.src=t.toDataURL("image/png");pv.classList.remove("hidden");}
+  else pv.classList.add("hidden");
+}
+$("useSig").addEventListener("click",()=>{
+  const t=trimmedCanvas();
+  if(!t){fail(new Error("Draw, type, or upload your signature first."));return;}
+  sigDataURL=t.toDataURL("image/png");
+  const ov=$("sigOverlay"),img=$("sigOverlayImg");
+  img.src=sigDataURL;
+  const aspect=t.height/t.width;
+  const w=Math.min(230,parseInt($("sigSize").value,10));
+  ov.style.width=w+"px";ov.style.height=(w*aspect)+"px";
+  ov.classList.remove("hidden");
+  step3.classList.remove("hidden");
+  PDFApp.hideError(errBox);
+  requestAnimationFrame(placeOverlayDefault);
+  step3.scrollIntoView({behavior:"smooth",block:"start"});
+});
+function placeOverlayDefault(){
+  const wrap=$("pageWrap"),ov=$("sigOverlay");
+  const x=Math.max(8,wrap.clientWidth-ov.offsetWidth-20);
+  const y=Math.max(8,wrap.clientHeight-ov.offsetHeight-40);
+  ov.style.left=x+"px";ov.style.top=y+"px";
+}
+
+/* ---------- document preview + placement ---------- */
+async function renderCurrentPage(){
+  const bytes=await workingDoc.save();
+  const pdf=await pdfjsLib.getDocument({data:bytes}).promise;
+  pageCount=pdf.numPages;
+  if(curPage>pageCount)curPage=pageCount;
+  const page=await pdf.getPage(curPage);
+  const v0=page.getViewport({scale:1});
+  const wrap=$("pageWrap");
+  const maxW=Math.min(680,wrap.parentElement.clientWidth||680);
+  pageScale=Math.min(2,maxW/v0.width);
+  const vp=page.getViewport({scale:pageScale});
+  const pc=$("pageCanvas");
+  pc.width=Math.floor(vp.width);pc.height=Math.floor(vp.height);
+  pc.style.width=Math.floor(vp.width)+"px";pc.style.height=Math.floor(vp.height)+"px";
+  await page.render({canvasContext:pc.getContext("2d"),viewport:vp}).promise;
+  $("pageLabel").textContent=`Page ${curPage} of ${pageCount}`;
+  const ov=$("sigOverlay");
+  if(!ov.classList.contains("hidden")){
+    ov.style.left=Math.min(parseFloat(ov.style.left)||0,Math.max(0,pc.width-ov.offsetWidth))+"px";
+    ov.style.top=Math.min(parseFloat(ov.style.top)||0,Math.max(0,pc.height-ov.offsetHeight))+"px";
+  }
+  try{await pdf.destroy();}catch(_){}
+}
+$("prevPage").addEventListener("click",()=>{if(curPage>1){curPage--;renderCurrentPage().catch(fail);}});
+$("nextPage").addEventListener("click",()=>{if(curPage<pageCount){curPage++;renderCurrentPage().catch(fail);}});
+(function initDrag(){
+  const ov=$("sigOverlay"),wrap=$("pageWrap");
+  let dragging=false,dx=0,dy=0;
+  ov.addEventListener("pointerdown",e=>{dragging=true;
+    const r=ov.getBoundingClientRect();dx=e.clientX-r.left;dy=e.clientY-r.top;
+    try{ov.setPointerCapture(e.pointerId);}catch(_){}e.preventDefault();});
+  ov.addEventListener("pointermove",e=>{if(!dragging)return;
+    const wr=wrap.getBoundingClientRect();
+    let x=e.clientX-wr.left-dx,y=e.clientY-wr.top-dy;
+    x=Math.max(0,Math.min(x,wr.width-ov.offsetWidth));
+    y=Math.max(0,Math.min(y,wr.height-ov.offsetHeight));
+    ov.style.left=x+"px";ov.style.top=y+"px";});
+  const stop=()=>{dragging=false;};
+  ov.addEventListener("pointerup",stop);ov.addEventListener("pointercancel",stop);
+})();
+$("sigSize").addEventListener("input",()=>{
+  const ov=$("sigOverlay");if(ov.classList.contains("hidden"))return;
+  const img=$("sigOverlayImg");
+  const aspect=(img.naturalHeight&&img.naturalWidth)?img.naturalHeight/img.naturalWidth:0.35;
+  const w=parseInt($("sigSize").value,10);
+  ov.style.width=w+"px";ov.style.height=(w*aspect)+"px";
+});
+
+/* ---------- apply / rebuild / download ---------- */
+function targetIndices(){
+  const v=document.querySelector('input[name=applyTo]:checked').value;
+  if(v==="all")return workingDoc.getPageIndices();
+  if(v==="last")return [workingDoc.getPageCount()-1];
+  return [curPage-1];
+}
+function targetLabel(idxs){
+  if(idxs.length===workingDoc.getPageCount())return"all pages";
+  if(idxs.length===1&&idxs[0]===workingDoc.getPageCount()-1&&curPage!==workingDoc.getPageCount())return"last page";
+  return"page "+idxs.map(i=>i+1).join(", ");
+}
+async function rebuild(){
+  workingDoc=await PDFLib.PDFDocument.load(origBytes,{ignoreEncryption:true});
+  for(const a of applied){
+    const png=await workingDoc.embedPng(b64ToBytes(a.sigURL));
+    for(const i of a.targets){
+      const pg=workingDoc.getPage(i);
+      pg.drawImage(png,{x:a.xPt,y:pg.getHeight()-a.yTopPt-a.hPt,width:a.wPt,height:a.hPt});
+    }
+  }
+}
+function renderApplied(){
+  const box=$("appliedList");box.innerHTML="";
+  applied.forEach((a,i)=>{
+    const c=document.createElement("span");c.className="chip";
+    const lbl=document.createElement("span");lbl.textContent=`Signature ${i+1} → ${a.label}`;
+    const x=document.createElement("button");x.type="button";x.textContent="×";x.setAttribute("aria-label","Remove signature "+(i+1));
+    x.addEventListener("click",async()=>{
+      applied.splice(i,1);
+      await PDFApp.withProgress(x,"",async()=>{await rebuild();renderApplied();await renderCurrentPage();});
+      if(!applied.length){doneBox.classList.add("hidden");$("dlWrap").classList.add("hidden");}
+    });
+    c.appendChild(lbl);c.appendChild(x);box.appendChild(c);
+  });
+}
+$("addSigBtn").addEventListener("click",()=>PDFApp.withProgress($("addSigBtn"),"Signing",async()=>{
+  PDFApp.hideError(errBox);
+  try{
+    if(!sigDataURL)throw new Error("Create your signature first (step 2).");
+    const ov=$("sigOverlay");
+    const ox=parseFloat(ov.style.left)||0,oy=parseFloat(ov.style.top)||0;
+    const ow=ov.offsetWidth,oh=ov.offsetHeight;
+    const idxs=targetIndices();
+    applied.push({
+      sigURL:sigDataURL,
+      xPt:ox/pageScale,yTopPt:oy/pageScale,
+      wPt:ow/pageScale,hPt:oh/pageScale,
+      targets:idxs.slice(),label:targetLabel(idxs)
+    });
+    await rebuild();
+    renderApplied();
+    await renderCurrentPage();
+    const bytes=await workingDoc.save();
+    PDFApp.showDone(doneBox,`<b>Signed.</b> ${applied.length} signature${applied.length>1?"s":""} placed — you can add more, or download.`);
+    $("dlWrap").classList.remove("hidden");
+  }catch(e){fail(e);}
+}));
+$("resetBtn").addEventListener("click",async()=>{
+  if(!origBytes)return;
+  applied=[];curPage=1;
+  await rebuild();renderApplied();await renderCurrentPage();
+  doneBox.classList.add("hidden");$("dlWrap").classList.add("hidden");
+});
+$("dlBtn").addEventListener("click",()=>PDFApp.withProgress($("dlBtn"),"Preparing",async()=>{
+  const bytes=await workingDoc.save();
+  PDFApp.download(bytes,origName.replace(/\.pdf$/i,"")+"-signed.pdf","application/pdf");
+}));
+
+/* ---------- file intake ---------- */
+PDFApp.dropzone(dz,async(fs)=>{
+  PDFApp.hideError(errBox);
+  const f=fs[0];if(!f)return;
+  if(!/\.pdf$/i.test(f.name)&&f.type!=="application/pdf"){fail(new Error(f.name+" is not a PDF."));return;}
+  try{
+    const libs=await needLibs();PDFLib=libs.PDFLib;pdfjsLib=libs.pdfjsLib;
+    origBytes=await PDFApp.readAsBytes(f);
+    origName=f.name;
+    workingDoc=await PDFLib.PDFDocument.load(origBytes,{ignoreEncryption:true});
+    pageCount=workingDoc.getPageCount();curPage=1;
+    fileList.innerHTML="";
+    fileList.appendChild(PDFApp.fileRow(f.name,pageCount+" pages · "+PDFApp.fmtSize(f.size),()=>{
+      origBytes=null;workingDoc=null;applied=[];fileList.innerHTML="";
+      step2.classList.add("hidden");step3.classList.add("hidden");
+      doneBox.classList.add("hidden");$("dlWrap").classList.add("hidden");
+    }));
+    step2.classList.remove("hidden");
+    await renderCurrentPage();
+    step2.scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(e){fail(e);}
+},".pdf,application/pdf");
+</script>
+<script>
+(function(){var r=document.documentElement;
+try{r.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}
+function paint(){var t=r.getAttribute("data-theme")==="light";
+var k=document.getElementById("themeKnob"),n=document.getElementById("themeName");
+if(k)k.innerHTML=t?'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>':'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'; if(n)n.textContent=t?"Dark":"Light";}
+var b=document.getElementById("themeBtn"); paint();
+b.addEventListener("click",function(){var t=r.getAttribute("data-theme")==="light"?"dark":"light";
+r.setAttribute("data-theme",t); try{localStorage.setItem("swp-theme",t);}catch(e){} paint();});})();
+</script>
+<footer class="site">
+  <div class="wrap">
+    <div class="fl">
+      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/pdf/">PDF Tools</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
+    </div>
+    <div>PDF tools — free, private PDF utilities that run entirely in your browser. Your files never leave your device. Built with open tools.</div>
+    <div class="tagline">ideas worth building.</div>
+  </div>
+</footer>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js").catch(function(){});}</script>
+</body>
+</html>

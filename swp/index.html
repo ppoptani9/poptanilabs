@@ -3,17 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F5D4E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg?v=20261005" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png?v=20261005" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png?v=20261005" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261005">
 <link rel="canonical" href="https://poptanilabs.com/swp/">
 <title>SWP Simulator — Indian Mutual Funds | Poptani Labs</title>
 <meta name="description" content="Free SWP calculator for Indian mutual funds. Simulate a Systematic Withdrawal Plan from a lumpsum investment — withdrawals, remaining value, XIRR and downloadable schedule, using live NAV data.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261004a">
+<link rel="stylesheet" href="/styles.css?v=20261005d">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
 <!-- PAWAN: after Google AdSense approves this site, replace ca-pub-6679021817940576 with your publisher ID in app.js (ADSENSE_CLIENT) and here. -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
@@ -22,14 +24,14 @@
 <div class="govbanner"><div class="wrap">● A free public tool &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Your data never leaves your browser</div></div>
 <header class="site">
   <div class="wrap nav">
-    <a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+    <a class="brand" href="/" aria-label="Poptani Labs home"><img class="brand-mark" src="/logo-mark.svg" alt="" width="34" height="34"><img class="brand-mark brand-mark-dark" src="/logo-mark-dark.svg?v=2" alt="" width="34" height="34"><span class="brand-name">Poptani <span>Labs</span></span></a>
     <nav>
-      <div class="navdrop"><button class="navdrop-btn active" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><a href="/swp/" class="active"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a></div></div><a href="/blog/">Blog</a>
+      <div class="navdrop"><button class="navdrop-btn active" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn active" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/" class="active"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/"><b>Birthday Cosmos</b><small>Your birthday's NASA picture of the day</small></a></div></div></div></div><a href="/blog/">Blog</a>
       <a href="#how">How it works</a>
       <a href="/about.html">About</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/contact.html">Contact</a>
-      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">Dark</span></button>
+      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span><span class="lname" id="themeName">Dark</span></button>
     </nav>
   </div>
 </header>
@@ -144,7 +146,7 @@
     <h2><span class="stepbadge">4</span> Simulation results</h2>
     <div class="whatif hidden" id="whatif">
       <div class="wi-head">
-        <span class="k">✨ What-if — drag to try a different withdrawal</span>
+        <span class="k">What-if — drag to try a different withdrawal</span>
         <span class="v" id="whatifVal">₹10.00K</span>
       </div>
       <input type="range" id="whatifRange" min="1000" max="100000" step="1000" value="10000" aria-label="Try a different withdrawal amount">
@@ -162,7 +164,7 @@
       <span class="pg" id="pgInfo"></span>
       <button id="pgNext">Next →</button>
     </div>
-    <div style="margin-top:12px"><button class="btn ghost" id="csvBtn">⬇ Download schedule (CSV)</button></div>
+    <div style="margin-top:12px"><button class="btn ghost" id="csvBtn">Download schedule (CSV)</button></div>
     <h2 style="margin-top:22px">Charts</h2>
     <div id="chartWrap" style="position:relative;height:360px"><canvas id="chart"></canvas></div>
   </div>
@@ -174,7 +176,7 @@
 
   <div class="card" id="how">
   <details class="howcard">
-    <summary><span>📖 Learn: what is SWP, how to use this, FAQs &amp; tax notes</span><span class="tw">▾</span></summary>
+    <summary><span>Learn: what is SWP, how to use this, FAQs &amp; tax notes</span><span class="tw">▾</span></summary>
     <div class="prose" style="margin-top:10px">
     <h2>What is SWP?</h2>
     <p>A <strong>Systematic Withdrawal Plan (SWP)</strong> lets you withdraw a fixed sum (or a fixed percentage) from your mutual fund investment at regular intervals — monthly, quarterly or yearly — while the remaining corpus stays invested and keeps compounding. It is the withdrawal mirror of a SIP, and is widely used to generate a regular income stream from a built-up corpus, for example in early retirement.</p>
@@ -225,13 +227,14 @@
 <footer class="site">
   <div class="wrap">
     <div class="fl">
-      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
+      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
       <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
     </div>
     <div>SWPCalc — free Systematic Withdrawal Plan simulator for Indian mutual funds. NAV data: mfapi.in. Built with open tools.</div>
     <div style="margin-top:6px">Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
   </div>
 </footer>
-<script src="/app.js?v=20261003f" defer></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js").catch(function(){});}</script>
+<script src="/app.js?v=20261005b" defer></script>
 </body>
 </html>

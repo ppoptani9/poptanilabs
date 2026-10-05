@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1000">
+  <title>Poptani Labs Stacked Logo</title>
+  <g transform="translate(194 60) scale(1.0)">
+    <path fill="#0F5D4E" d="M54 398 L178 176 L236 276 L315 132 L458 398 Z"/>
+    <path fill="#0F5D4E" d="M111 398 L179 275 L224 349 L278 255 L365 398 Z"/>
+    <path fill="#D4A373" d="M376 48 L382 77 L411 83 L382 89 L376 118 L370 89 L341 83 L370 77 Z"/>
+    <path fill="#0F5D4E" d="M84 398 L84 250 L121 250 L121 333 L164 333 L164 398 Z"/>
+    <path fill="#0F5D4E" d="M121 250 C174 205 247 220 247 276 C247 315 211 333 164 333 L164 301 C190 301 211 294 211 276 C211 257 181 250 157 250 Z"/>
+  </g>
+  <text x="450" y="620" text-anchor="middle"
+        font-family="Inter, Arial, sans-serif" font-size="78" font-weight="650"
+        letter-spacing="18" fill="#0E1114">POPTANI</text>
+  <text x="450" y="710" text-anchor="middle"
+        font-family="Inter, Arial, sans-serif" font-size="48" font-weight="450"
+        letter-spacing="22" fill="#0E1114">LABS</text>
+  <path d="M290 770 H610" stroke="#D4A373" stroke-width="4"/>
+  <text x="450" y="835" text-anchor="middle"
+        font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500"
+        letter-spacing="7" fill="#0F5D4E">IDEAS WORTH BUILDING.</text>
+</svg>

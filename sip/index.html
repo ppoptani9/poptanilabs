@@ -3,17 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0F5D4E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg?v=20261005" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png?v=20261005" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png?v=20261005" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261005">
 <link rel="canonical" href="https://poptanilabs.com/sip/">
 <title>SIP Calculator — Indian Mutual Funds | Poptani Labs</title>
 <meta name="description" content="Free SIP calculator for Indian mutual funds. Simulate a Systematic Investment Plan on real NAV history — with annual step-up, XIRR, full schedule and downloadable results.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261004a">
+<link rel="stylesheet" href="/styles.css?v=20261005d">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
 </head>
@@ -21,12 +23,12 @@
 <div class="govbanner"><div class="wrap">● A free public tool &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Your data never leaves your browser</div></div>
 <header class="site">
   <div class="wrap nav">
-    <a class="brand" href="/">Poptani&nbsp;<span>Labs</span></a>
+    <a class="brand" href="/" aria-label="Poptani Labs home"><img class="brand-mark" src="/logo-mark.svg" alt="" width="34" height="34"><img class="brand-mark brand-mark-dark" src="/logo-mark-dark.svg?v=2" alt="" width="34" height="34"><span class="brand-name">Poptani <span>Labs</span></span></a>
     <nav>
-      <div class="navdrop"><button class="navdrop-btn active" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/" class="active"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a></div></div><a href="/blog/">Blog</a>
+      <div class="navdrop"><button class="navdrop-btn active" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn active" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/" class="active"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/"><b>Birthday Cosmos</b><small>Your birthday's NASA picture of the day</small></a></div></div></div></div><a href="/blog/">Blog</a>
       <a href="#how">How it works</a>
       <a href="/about.html">About</a>
-      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob">🌙</span></span><span class="lname" id="themeName">Dark</span></button>
+      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span><span class="lname" id="themeName">Dark</span></button>
     </nav>
   </div>
 </header>
@@ -35,7 +37,7 @@
   <div class="hero slim">
     <span class="kicker">Free · No sign-up · Live NAV data</span>
     <h1>Watch your <span class="grad">SIP</span> bloom</h1>
-    <p>See what a monthly SIP would have grown into — on <b>real NAV history</b>, with optional annual step-up. Pick a scheme, set your plan, get the full run-down.</p>
+    <p>See what a monthly SIP would have grown into — on <b>real NAV history</b>, with optional annual step-up and lumpsum top-ups. Pick a scheme, set your plan, get the full run-down.</p>
   </div>
 
   <div class="adslot">
@@ -68,6 +70,11 @@
         <input type="range" id="stepUpSld" class="sld" aria-label="Annual step-up slider">
         <div class="sld-caps"><span>0%</span><span>100%</span></div>
       </div>
+    </div>
+    <div style="margin-top:4px">
+      <label style="margin-bottom:2px">Lumpsum top-ups <span class="hint" style="display:inline;font-weight:400">— optional. Extra investments on any date; tap + to add more.</span></label>
+      <div id="lumpList"></div>
+      <button type="button" class="chip" id="lumpAdd" style="margin-top:10px">＋ Add lumpsum</button>
     </div>
     <div id="simError" class="err hidden"></div>
   </div>
@@ -113,7 +120,7 @@
     <h2>Investment Schedule &amp; Run-down</h2>
     <div class="hint" id="schedNote" style="margin-bottom:8px"></div>
     <div class="tblwrap"><table class="sched">
-      <thead><tr><th>SIP date</th><th>NAV date used</th><th>NAV (₹)</th><th>Invested</th><th>Units bought</th><th>Total units</th><th>Invested so far</th></tr></thead>
+      <thead><tr><th>Date</th><th>NAV date used</th><th>NAV (₹)</th><th>Invested</th><th>Units bought</th><th>Total units</th><th>Invested so far</th></tr></thead>
       <tbody id="schedBody"></tbody>
     </table></div>
     <div class="pager hidden" id="schedPager">
@@ -121,7 +128,7 @@
       <span class="pg" id="pgInfo"></span>
       <button id="pgNext">Next →</button>
     </div>
-    <div style="margin-top:12px"><button class="btn ghost" id="csvBtn">⬇ Download schedule (CSV)</button></div>
+    <div style="margin-top:12px"><button class="btn ghost" id="csvBtn">Download schedule (CSV)</button></div>
     <h2 style="margin-top:22px">Charts</h2>
     <div id="chartWrap" style="position:relative;height:360px"><canvas id="chart"></canvas></div>
   </div>
@@ -133,13 +140,14 @@
 
   <div class="card" id="how">
   <details class="howcard">
-    <summary><span>📖 Learn: what is SIP, how to use this, FAQs &amp; tax notes</span><span class="tw">▾</span></summary>
+    <summary><span>Learn: what is SIP, how to use this, FAQs &amp; tax notes</span><span class="tw">▾</span></summary>
     <div class="prose" style="margin-top:10px">
     <h2>What is SIP?</h2>
     <p>A <strong>Systematic Investment Plan (SIP)</strong> invests a fixed sum in a mutual fund at regular intervals — usually monthly. It automates rupee-cost averaging: you buy more units when NAVs are low and fewer when they're high, smoothing out market timing.</p>
     <h2>How to use this calculator</h2>
     <ol>
       <li>Set your <strong>monthly SIP amount</strong>, the <strong>day of the month</strong>, and your <strong>start/end dates</strong> in Step 1.</li>
+      <li>Optionally add <strong>lumpsum top-ups</strong> on any date (tap ＋ Add lumpsum — add as many as you like).</li>
       <li>Optionally add an <strong>annual step-up</strong> — your SIP grows by that percent every 12 months, mirroring salary hikes.</li>
       <li><strong>Search and select</strong> your mutual fund scheme in Step 2.</li>
       <li>Hit <strong>Run SIP Simulation</strong> — the calculator replays history using actual NAVs: each instalment buys units at the prevailing NAV, and you get total invested, current value, gains and the <strong>XIRR</strong> of the whole cashflow.</li>
@@ -184,13 +192,14 @@
 <footer class="site">
   <div class="wrap">
     <div class="fl">
-      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
+      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
       <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
     </div>
     <div>SIPCalc — free Systematic Investment Plan calculator for Indian mutual funds. NAV data: mfapi.in. Built with open tools.</div>
     <div style="margin-top:6px">Educational tool only — not financial advice. Mutual fund investments are subject to market risks.</div>
   </div>
 </footer>
-<script src="/sip.js?v=20261003g" defer></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js").catch(function(){});}</script>
+<script src="/sip.js?v=20261005b" defer></script>
 </body>
 </html>

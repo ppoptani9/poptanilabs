@@ -1,3 +1,0 @@
-# ads.txt — authorizes Google AdSense to sell ad inventory on poptanilabs.com
-# Publisher: Pawan Deepak Poptani (ca-pub-6679021817940576)
-google.com, pub-6679021817940576, DIRECT, f08c47fec0942fa0

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0F5D4E">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg?v=20261005" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png?v=20261005" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png?v=20261005" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261005">
+<link rel="canonical" href="https://poptanilabs.com/emi/">
+<title>EMI Calculator — Home, Car & Personal Loan | Poptani Labs</title>
+<meta name="description" content="Free EMI calculator for home, car and personal loans in India. Amortization schedule, part-prepayments (reduce EMI or tenure), fees, charts and CSV download. Runs 100% in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=20261005d">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
+<style>
+.pp-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;
+  padding:12px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:var(--card)}
+.pp-row label{font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;display:block}
+.pp-row input,.pp-row select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
+  font-size:1rem;background:var(--bg);color:var(--ink);font-family:inherit}
+.ppX{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:10px;
+  width:42px;height:42px;font-size:1rem;cursor:pointer}
+.ppX:hover{color:var(--bad);border-color:var(--bad)}
+@media(max-width:640px){.pp-row{grid-template-columns:1fr 1fr}.ppX{grid-column:span 2;width:100%}}
+#saveBanner .metric{padding:14px 18px}
+</style>
+</head>
+<body>
+<div class="govbanner"><div class="wrap">● A free public tool &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Your data never leaves your browser</div></div>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/" aria-label="Poptani Labs home"><img class="brand-mark" src="/logo-mark.svg" alt="" width="34" height="34"><img class="brand-mark brand-mark-dark" src="/logo-mark-dark.svg?v=2" alt="" width="34" height="34"><span class="brand-name">Poptani <span>Labs</span></span></a>
+    <nav>
+      <div class="navdrop"><button class="navdrop-btn active" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn active" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a><a href="/emi/" class="active"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/"><b>Birthday Cosmos</b><small>Your birthday's NASA picture of the day</small></a></div></div></div></div><a href="/blog/">Blog</a>
+      <a href="#how">How it works</a>
+      <a href="/about.html">About</a>
+      <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span><span class="lname" id="themeName">Dark</span></button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero slim">
+    <span class="kicker">Free · No sign-up · Runs in your browser</span>
+    <h1>Know your loan <span class="grad">before it knows you.</span></h1>
+    <p>Model the full life of any home, car or personal loan — EMI, amortization, part-prepayments that cut tenure <em>or</em> EMI, fees and all. Down to the last rupee.</p>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div class="card" id="inputsCard">
+    <h2><span class="stepbadge">1</span> Your loan <span class="sub">Everything recalculates as you type</span></h2>
+    <div class="grid2">
+      <div>
+        <label for="loanAmt">Loan amount (₹)</label>
+        <input type="text" id="loanAmt" inputmode="numeric" value="50,00,000" autocomplete="off">
+        <input type="range" id="loanAmtSld" class="sld" aria-label="Loan amount slider">
+        <div class="sld-caps"><span>₹10K</span><span>₹10Cr</span></div>
+        <div class="hint" id="loanAmtHint"></div>
+        <label for="loanRate">Annual interest rate (%)</label>
+        <input type="number" id="loanRate" min="0" max="60" step="0.05" value="9">
+        <input type="range" id="loanRateSld" class="sld" aria-label="Interest rate slider">
+        <div class="sld-caps"><span>0%</span><span>30%</span></div>
+        <div class="hint" id="rateHint"></div>
+      </div>
+      <div>
+        <label for="loanTenure">Loan tenure</label>
+        <div class="row" style="gap:8px">
+          <input type="number" id="loanTenure" min="1" step="1" value="20" style="flex:1">
+          <select id="tenureUnit" style="max-width:130px" aria-label="Tenure unit">
+            <option value="years" selected>Years</option>
+            <option value="months">Months</option>
+          </select>
+        </div>
+        <input type="range" id="loanTenureSld" class="sld" aria-label="Tenure slider">
+        <div class="sld-caps"><span>1 yr</span><span>30 yrs</span></div>
+        <label for="loanStart">Loan start month</label>
+        <input type="month" id="loanStart">
+        <label for="procFee">Processing fee (₹) <span class="hint" style="display:inline;font-weight:400">— optional, paid upfront</span></label>
+        <input type="text" id="procFee" inputmode="numeric" value="0" autocomplete="off">
+      </div>
+    </div>
+    <div id="loanError" class="err hidden"></div>
+  </div>
+
+  <div class="card" id="prepayCard">
+    <h2><span class="stepbadge">2</span> Part-prepayments <span class="sub">Optional — this is where the real savings hide</span></h2>
+    <p class="hint" style="margin-top:0">Add one-off prepayments on any month, each set to <b>reduce tenure</b> (same EMI, loan ends sooner) or <b>reduce EMI</b> (same end date, lighter monthly outgo). Plus an optional yearly bonus prepayment.</p>
+    <div id="ppList"></div>
+    <button type="button" class="chip" id="ppAdd" style="margin-top:10px">＋ Add prepayment</button>
+    <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="ppRecurOn" style="width:18px;height:18px"> <b>Yearly bonus prepayment</b>
+        <span class="hint" style="display:inline;font-weight:400">— e.g. deploy your annual bonus every year</span>
+      </label>
+      <div id="ppRecurBox" class="hidden" style="margin-top:10px">
+        <div class="grid2">
+          <div>
+            <label for="ppRecurAmt">Amount each year (₹)</label>
+            <input type="text" id="ppRecurAmt" inputmode="numeric" value="1,00,000" autocomplete="off">
+          </div>
+          <div>
+            <label for="ppRecurMode">Each prepayment should</label>
+            <select id="ppRecurMode">
+              <option value="tenure" selected>Reduce tenure (same EMI)</option>
+              <option value="emi">Reduce EMI (same end date)</option>
+            </select>
+          </div>
+        </div>
+        <div class="hint" id="ppRecurHint">Applied every 12 months from the loan start month, until the loan closes.</div>
+      </div>
+    </div>
+    <div id="ppError" class="err hidden"></div>
+  </div>
+
+  <div class="card hidden" id="resultsCard">
+    <h2><span class="stepbadge">3</span> Your loan, decoded</h2>
+    <div class="metrics" id="metrics"></div>
+    <div id="saveBanner" class="hidden" style="margin-top:12px"></div>
+    <h2 style="margin-top:22px">Charts</h2>
+    <div class="grid2">
+      <div>
+        <h3 style="font-size:.95rem;margin:0 0 8px">Principal vs interest, per year</h3>
+        <div style="position:relative;height:300px"><canvas id="chartSplit"></canvas></div>
+      </div>
+      <div>
+        <h3 style="font-size:.95rem;margin:0 0 8px">Outstanding balance over time</h3>
+        <div style="position:relative;height:300px"><canvas id="chartBal"></canvas></div>
+      </div>
+    </div>
+    <h2 style="margin-top:22px">Amortization schedule
+      <span class="sub">Switch views, page through, or take the CSV to Excel</span></h2>
+    <div class="row" style="align-items:center;gap:10px;margin-bottom:8px">
+      <div class="chips" role="tablist" aria-label="Schedule view">
+        <button class="chip on" id="viewMonthly" role="tab">Monthly</button>
+        <button class="chip" id="viewYearly" role="tab">Yearly</button>
+      </div>
+      <span class="hint" id="schedNote" style="margin:0"></span>
+    </div>
+    <div class="tblwrap"><table class="sched">
+      <thead id="schedHead"></thead>
+      <tbody id="schedBody"></tbody>
+    </table></div>
+    <div class="pager" id="schedPager">
+      <button id="pgPrev">← Prev</button>
+      <span class="pg" id="pgInfo"></span>
+      <button id="pgNext">Next →</button>
+    </div>
+    <div style="margin-top:12px"><button class="btn ghost" id="csvBtn">Download schedule (CSV)</button></div>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div class="card" id="how">
+  <details class="howcard">
+    <summary><span>Learn: how EMI works, prepayment strategy &amp; FAQs</span><span class="tw">▾</span></summary>
+    <div class="prose" style="margin-top:10px">
+    <h2>How is EMI calculated?</h2>
+    <p>Indian lenders use the <strong>reducing-balance method</strong>: each EMI first pays that month's interest on the <em>outstanding</em> balance, and the rest chips away the principal. The formula is <strong>EMI = P × r × (1+r)<sup>n</sup> / ((1+r)<sup>n</sup> − 1)</strong>, where <em>r</em> is the monthly rate and <em>n</em> the number of months. Early EMIs are mostly interest; later ones are mostly principal.</p>
+    <h2>Reduce tenure or reduce EMI?</h2>
+    <p>Both deploy the same prepayment, but <strong>reducing tenure saves far more interest</strong> — your EMI stays the same and the loan simply ends sooner. Reducing EMI keeps the original end date and just lightens each month. Rule of thumb: if your monthly budget is comfortable, always reduce tenure. Reduce EMI only if cash flow is the constraint.</p>
+    <h2>When do prepayments hurt?</h2>
+    <p>Some lenders levy <strong>foreclosure / part-prepayment charges</strong> (typically 2–4% on fixed-rate loans; floating-rate home loans for individuals can't be charged prepayment penalty per RBI rules). Prepaying in the <em>first half</em> of the tenure saves the most, since that's when the interest component is fattest.</p>
+    <div class="faq">
+      <h2>Frequently asked questions</h2>
+      <details><summary>Does the processing fee change my EMI?</summary><p>No — it's an upfront cost paid to the lender, so it doesn't enter the principal or the EMI math. This calculator adds it to your <em>total cost of the loan</em> so you compare offers honestly.</p></details>
+      <details><summary>What if my rate is floating and changes later?</summary><p>Model the current rate now; when your lender resets the rate, re-run with the new rate and remaining balance as a fresh loan. (A floating-rate tracker with reset events is on the roadmap.)</p></details>
+      <details><summary>Why does my bank's EMI differ by a few rupees?</summary><p>Banks round the EMI and adjust the last instalment; some compute on daily balances. A difference of a few rupees is normal rounding — if it's hundreds, check the rate and tenure they actually applied.</p></details>
+      <details><summary>Is my data stored anywhere?</summary><p>No. Everything runs in your browser — no accounts, no tracking of your inputs. See the <a href="/privacy.html">privacy policy</a>.</p></details>
+    </div>
+    <div class="disclaimer"><strong>Disclaimer:</strong> This is an educational calculator, not financial advice. Actual loan terms, charges and rounding vary by lender — confirm with your sanction letter. Mutual fund investments are subject to market risks — read all scheme documents carefully.</div>
+    </div>
+  </details>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fl">
+      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
+    </div>
+    <div>EMICalc — free loan EMI calculator with amortization, prepayments and charts. Built with open tools.</div>
+    <div style="margin-top:6px">Educational tool only — not financial advice. Confirm actual terms with your lender.</div>
+  </div>
+</footer>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js").catch(function(){});}</script>
+<script src="/emi.js?v=4" defer></script>
+</body>
+</html>

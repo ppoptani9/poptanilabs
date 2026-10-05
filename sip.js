@@ -6,8 +6,8 @@ const API_BASE = "https://api.mfapi.in";
 const rootEl = document.documentElement;
 function paintThemeBtn(){ const t=rootEl.getAttribute("data-theme");
   const k=document.getElementById("themeKnob"), n=document.getElementById("themeName");
-  if(k) k.textContent = t==="light" ? "🌙" : "☀️";
-  if(n) n.textContent = t==="light" ? "AMOLED dark" : "Light"; }
+  if(k) k.innerHTML = t === "light" ? '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>' : '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  if(n) n.textContent = t==="light" ? "Dark" : "Light"; }
 function setTheme(t){ rootEl.setAttribute("data-theme", t); try{localStorage.setItem("swp-theme",t);}catch(e){} paintThemeBtn(); }
 setTheme((()=>{try{return localStorage.getItem("swp-theme")||"light";}catch(e){return "light";}})());
 document.getElementById("themeBtn").addEventListener("click", () =>
@@ -31,7 +31,175 @@ const daysInMonth = (y,m) => new Date(y, m+1, 0).getDate();
 /* ---------- fund list (bundled snapshot + live refresh, same as SWP page) ---------- */
 let FUNDS = [];
 const fundState = { query:"", amc:"", selected:null };
-function amcOf(name){ const w = name.split(" ")[0]; return /^[A-Za-z]/.test(w) ? w : "Other"; }
+/* Canonical fund-house names from the scheme name’s leading brand prefix
+   (the bulk scheme list carries no AMC field). Longest-prefix-first match.
+   Historical renames merged: Reliance->Nippon India, IDFC->Bandhan,
+   Birla Sun Life->Aditya Birla Sun Life. */
+const AMC_NAMES = {
+  "360": "360 ONE",
+  "ABAKKUS": "Abakkus",
+  "ABN": "ABN Amro",
+  "ABN AMRO": "ABN Amro",
+  "ADITYA": "Aditya Birla Sun Life",
+  "ADITYA BIRLA": "Aditya Birla Sun Life",
+  "AIG": "AIG",
+  "ALPHAGREP": "Alphagrep",
+  "AMRO": "ABN Amro",
+  "ANARA ROBECO": "Canara Robeco",
+  "ANGEL": "Angel One",
+  "ASK": "ASK",
+  "AXIS": "Axis",
+  "BAJAJ": "Bajaj Finserv",
+  "BANDHAN": "Bandhan",
+  "BANK": "Nippon India",
+  "BANK OF INDIA": "Bank of India",
+  "BARODA": "Baroda BNP Paribas",
+  "BARODA BNP": "Baroda BNP Paribas",
+  "BARODA PIONEER": "Baroda BNP Paribas",
+  "BENCHMARK": "Benchmark",
+  "BHARAT 22": "ICICI Prudential",
+  "BHARAT BOND": "Edelweiss",
+  "BHARTI AXA": "Bharti AXA",
+  "BIRLA": "Aditya Birla Sun Life",
+  "BIRLA SUN": "Aditya Birla Sun Life",
+  "BNP": "BNP Paribas",
+  "BNP PARIBAS": "BNP Paribas",
+  "BOB": "Baroda BNP Paribas",
+  "BOI": "BOI AXA",
+  "BOI AXA": "BOI AXA",
+  "BSL": "Aditya Birla Sun Life",
+  "BSL COMM": "Aditya Birla Sun Life",
+  "CAN D": "Canara Robeco",
+  "CANARA": "Canara Robeco",
+  "CANARA ROBECO": "Canara Robeco",
+  "CANFIXED": "Canara Robeco",
+  "CANGROWTH": "Canara Robeco",
+  "CAPITALMIND": "Capitalmind",
+  "CHOICE": "Choice",
+  "CPSE": "Nippon India",
+  "DAIWA": "Daiwa",
+  "DBS": "DBS",
+  "DHFL": "DHFL Pramerica",
+  "DHFL PRAMERICA": "DHFL Pramerica",
+  "DSP": "DSP",
+  "DWS": "DWS",
+  "EDELWEISS": "Edelweiss",
+  "ESCORTS": "Escorts",
+  "ESSEL": "Essel",
+  "FIDELITY": "Fidelity",
+  "FORTIS": "Fortis",
+  "FRANKLIN": "Franklin Templeton",
+  "FRANKLIN INDIA": "Franklin Templeton",
+  "FRANKLIN TEMPLETON": "Franklin Templeton",
+  "FT INDIA": "Franklin Templeton",
+  "GCF": "Standard Chartered",
+  "GFRF": "Standard Chartered",
+  "GOLD": "Nippon India",
+  "GOLDMAN": "Goldman Sachs",
+  "GOLDMAN SACHS": "Goldman Sachs",
+  "GRINDAYS": "Standard Chartered",
+  "GRINDLAYS": "Standard Chartered",
+  "GROWW": "Groww",
+  "GSSIF": "Standard Chartered",
+  "HANG": "Nippon India",
+  "HDFC": "HDFC",
+  "HELIOS": "Helios",
+  "HSBC": "HSBC",
+  "ICICI": "ICICI Prudential",
+  "ICICI PRUDENTIAL": "ICICI Prudential",
+  "IDBI": "IDBI",
+  "IDFC": "Bandhan",
+  "IIFCL": "IIFCL",
+  "IIFL": "IIFL",
+  "IL&FS": "IL&FS",
+  "INDIABULLS": "Indiabulls",
+  "INFRASTRUCTURE": "Nippon India",
+  "ING": "ING",
+  "INVESCO": "Invesco",
+  "ITI": "ITI",
+  "JIOBLACKROCK": "JioBlackRock",
+  "JM": "JM Financial",
+  "JM FINANCIAL": "JM Financial",
+  "JM FMF": "JM Financial",
+  "JPMORGAN": "JPMorgan",
+  "KOTAK": "Kotak",
+  "KOTKA": "Kotak",
+  "L&T": "L&T",
+  "LAKSHYA": "Lakshya",
+  "LIC": "LIC",
+  "LICMF": "LIC",
+  "LOTUS INDIA": "Lotus India",
+  "MAHINDRA": "Mahindra Manulife",
+  "MAHINDRA MANULIFE": "Mahindra Manulife",
+  "MAHINDRAMANULIFE": "Mahindra Manulife",
+  "MIRAE": "Mirae Asset",
+  "MIRAE ASSET": "Mirae Asset",
+  "MOF30": "Motilal Oswal",
+  "MONARCH": "Monarch",
+  "MORGAN": "Morgan Stanley",
+  "MORGAN STANLEY": "Morgan Stanley",
+  "MOST": "Motilal Oswal",
+  "MOTILAL": "Motilal Oswal",
+  "MOTILAL OSWAL": "Motilal Oswal",
+  "NAVI": "Navi",
+  "NIFTY": "Nippon India",
+  "NIPPON": "Nippon India",
+  "NIPPON INDIA": "Nippon India",
+  "NJ": "NJ",
+  "OLD BRIDGE": "Old Bridge",
+  "OLD-SBI": "SBI",
+  "OTAK": "Kotak",
+  "PARAG PARIKH": "Parag Parikh",
+  "PEERLESS": "Peerless",
+  "PGIM": "PGIM India",
+  "PINEBRIDGE": "PineBridge",
+  "PRAMERICA": "DHFL Pramerica",
+  "PRINCIPAL": "Principal",
+  "PRINCIPAL PNB": "Principal",
+  "PSU": "Nippon India",
+  "QUANT": "Quant",
+  "QUANTUM": "Quantum",
+  "R*SHARES": "Nippon India",
+  "RAMERICA": "DHFL Pramerica",
+  "REDEEMED-SBI": "SBI",
+  "RELIANCE": "Nippon India",
+  "RELIGARE": "Religare",
+  "RELIGARE INVESCO": "Invesco",
+  "RINCIPAL": "Principal",
+  "SAHARA": "Sahara",
+  "SAHARATAX": "Sahara",
+  "SAMCO": "Samco",
+  "SBI": "SBI",
+  "SCFMP": "Standard Chartered",
+  "SHARIAH": "Nippon India",
+  "SHINSEI": "Daiwa",
+  "SHRIRAM": "Shriram",
+  "STANDARD CHARTERED": "Standard Chartered",
+  "SUNDARAM": "Sundaram",
+  "TARUS": "Tata",
+  "TATA": "Tata",
+  "TAURUS": "Taurus",
+  "TEMPLETON": "Franklin Templeton",
+  "TFMP": "Franklin Templeton",
+  "THE WEALTH COMPANY": "The Wealth Company",
+  "TRUST": "Trust",
+  "TRUSTMF": "Trust",
+  "UNIFI": "Unifi",
+  "UNION": "Union",
+  "UNION KBC": "Union",
+  "UTI": "UTI",
+  "WHITEOAK": "WhiteOak",
+  "YES": "Yes",
+  "Z-OLD-SBI": "SBI",
+  "Z-REDEEMED-SBI": "SBI",
+  "ZERODHA": "Zerodha",
+};
+const AMC_KEYS = Object.keys(AMC_NAMES).sort((a,b)=>b.length-a.length);
+function amcOf(name){
+  const up = String(name||"").trim().toUpperCase();
+  for(let i=0;i<AMC_KEYS.length;i++){ if(up.startsWith(AMC_KEYS[i])) return AMC_NAMES[AMC_KEYS[i]]; }
+  return "Other";
+}
 
 async function loadFundList(){
   const status = document.getElementById("fundStatus");
@@ -154,7 +322,7 @@ async function selectFund(code, name){
     if(!launch) launch = fmtDate(NAV[0].d);
     const latest = NAV[NAV.length-1];
     document.getElementById("schemeMeta").innerHTML =
-      `🏦 <b>Fund House:</b> ${fundHouse} &nbsp;·&nbsp; 📅 <b>Launch:</b> ${launch}<br>` +
+      `<b>Fund House:</b> ${fundHouse} &nbsp;·&nbsp; <b>Launch:</b> ${launch}<br>` +
       `Latest NAV (as on ${fmtDate(latest.d)}): <b>₹${latest.nav.toFixed(4)}</b> &nbsp;·&nbsp; ${NAV.length.toLocaleString("en-IN")} NAV records`;
     setupInputs();
   }catch(e){
@@ -407,7 +575,7 @@ function initDatePicker(id){
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = "calbtn";
-  btn.textContent = "📅";
+  btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
   btn.setAttribute("aria-label", "Pick a date from the calendar");
   btn.addEventListener("click", e => { e.stopPropagation(); openCal(el); });
   wrap.appendChild(btn);
@@ -423,8 +591,56 @@ function setupInputs(){
   const lim = (id, mn, mx) => { const el=document.getElementById(id); el.min=fmtDate(mn); el.max=fmtDate(mx); };
   set("sipStart", fmtDate(defStart)); lim("sipStart", minD, today);
   set("sipEnd", fmtDate(capMax)); lim("sipEnd", minD, today);
+  document.querySelectorAll("#lumpList .lump-date").forEach(el => { el.min = fmtDate(minD); el.max = fmtDate(capMax); });
   syncAllSliders();
   updateReadiness();
+}
+
+/* ---------- lumpsum top-ups (optional, multiple) ---------- */
+function lumpNavBounds(){
+  if(!NAV.length) return [null, null];
+  const t = new Date(); t.setHours(0,0,0,0);
+  const mx = NAV[NAV.length-1].d < t ? NAV[NAV.length-1].d : t;
+  return [NAV[0].d, mx];
+}
+function addLumpRow(){
+  const list = document.getElementById("lumpList");
+  if(!list) return;
+  const row = document.createElement("div");
+  row.className = "row lump-row";
+  row.style.marginTop = "10px";
+  const did = "lumpDate" + Date.now() + list.children.length;
+  row.innerHTML =
+    `<div><label for="${did}">Date</label><input type="date" class="lump-date" id="${did}"></div>` +
+    `<div><label>Amount (\u20B9)</label><input type="number" class="lump-amt" min="1" step="any" placeholder="e.g. 50000"></div>` +
+    `<div style="flex:0 0 auto;min-width:0"><button type="button" class="chip lump-del" aria-label="Remove this lumpsum" style="padding:9px 15px">\u00D7</button></div>`;
+  list.appendChild(row);
+  const dEl = row.querySelector(".lump-date");
+  const [mn, mx] = lumpNavBounds();
+  if(mn){ dEl.min = fmtDate(mn); dEl.max = fmtDate(mx); }
+  initDatePicker(did);
+  row.querySelector(".lump-del").addEventListener("click", () => { row.remove(); updateReadiness(); maybeRerun(); });
+  row.querySelectorAll("input").forEach(el => {
+    el.addEventListener("input", () => { updateReadiness(); maybeRerun(); });
+    el.addEventListener("change", () => { updateReadiness(); maybeRerun(); });
+  });
+  updateReadiness();
+}
+function collectLumpsums(){
+  const out = [];
+  const t = new Date(); t.setHours(0,0,0,0);
+  document.querySelectorAll("#lumpList .lump-row").forEach((row, i) => {
+    const ds = row.querySelector(".lump-date").value;
+    const as = row.querySelector(".lump-amt").value;
+    if(!ds && !as) return; // untouched row — ignore
+    if(!ds || !(parseFloat(as) > 0))
+      throw new Error(`Lumpsum #${i+1}: enter both a date and an amount (or remove the row).`);
+    const d = parseDate(ds); d.setHours(0,0,0,0);
+    if(d < NAV[0].d || d > t)
+      throw new Error(`Lumpsum #${i+1}: date must be within the fund's NAV history.`);
+    out.push({date:d, amount:parseFloat(as)});
+  });
+  return out;
 }
 
 /* ---------- readiness gate ---------- */
@@ -445,6 +661,8 @@ function updateReadiness(){
   items.push({ok: endOk, label: !ed ? "Enter the SIP end date" : (endOk ? `SIP ends: ${ed}` : "End date can't be before the start date")});
   const su = parseFloat(g("stepUp").value);
   items.push({ok: su>=0 && su<=100, label: (su>=0 && su<=100) ? `Step-up: ${su}% every year` : "Step-up must be between 0 and 100%"});
+  const lumpCount = document.querySelectorAll("#lumpList .lump-row").length;
+  if(lumpCount) items.push({ok:true, label:`Lumpsums: ${lumpCount} top-up${lumpCount===1?"":"s"} added`});
   const allOk = items.every(i=>i.ok);
   box.innerHTML = items.map(i =>
     `<div class="ready-item ${i.ok?"ok":"miss"}"><span class="ric">${i.ok?"✓":"○"}</span><span>${i.label}</span></div>`).join("");
@@ -466,9 +684,8 @@ function runSimulation(noscroll){
     if(!(sipDay>=1 && sipDay<=31)) throw new Error("SIP day must be between 1 and 31.");
     if(end < start) throw new Error("End date can't be before the start date.");
 
-    let units = 0, invested = 0;
-    const cashflows = [];
-    const rows = [];
+    const lumps = collectLumpsums();
+    const events = [];
     const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
     const endMonth = new Date(end.getFullYear(), end.getMonth(), 1);
     while(cursor <= endMonth){
@@ -477,17 +694,26 @@ function runSimulation(noscroll){
       if(invDate < start) invDate = new Date(start);
       if(invDate > end) break;
       const yearsDone = Math.floor((invDate - start)/864e5/365);
-      const amount = sipAmt * Math.pow(1 + stepUp/100, yearsDone);
-      const rec = nearestPreviousNAV(invDate);
-      if(!rec) throw new Error("No NAV on or before " + fmtDate(invDate) + " — pick a later start date.");
-      const bought = amount / rec.nav;
-      units += bought; invested += amount;
-      cashflows.push([invDate.getTime(), -amount]);
-      rows.push({d:fmtDate(invDate), navDate:fmtDate(rec.d), nav:rec.nav, amt:amount,
-                 bought, units, invested, value:units*rec.nav});
+      events.push({date:invDate, amount:sipAmt*Math.pow(1 + stepUp/100, yearsDone), type:"SIP"});
       cursor.setMonth(cursor.getMonth()+1);
     }
-    if(!rows.length) throw new Error("No SIP instalments in this date range.");
+    lumps.forEach(l => events.push({date:l.date, amount:l.amount, type:"Lumpsum"}));
+    events.sort((a,b) => a.date - b.date || (a.type==="SIP" ? -1 : 1));
+    if(!events.length) throw new Error("No investments in this date range.");
+
+    let units = 0, invested = 0, sipN = 0;
+    const cashflows = [];
+    const rows = [];
+    for(const ev of events){
+      const rec = nearestPreviousNAV(ev.date);
+      if(!rec) throw new Error("No NAV on or before " + fmtDate(ev.date) + " — pick a later date.");
+      const bought = ev.amount / rec.nav;
+      units += bought; invested += ev.amount;
+      if(ev.type === "SIP") sipN++;
+      cashflows.push([ev.date.getTime(), -ev.amount]);
+      rows.push({d:fmtDate(ev.date), navDate:fmtDate(rec.d), nav:rec.nav, amt:ev.amount,
+                 bought, units, invested, value:units*rec.nav, type:ev.type});
+    }
 
     const latestNAV = NAV[NAV.length-1].nav;
     const latestNAVDate = NAV[NAV.length-1].d;
@@ -495,7 +721,7 @@ function runSimulation(noscroll){
     cashflows.push([latestNAVDate.getTime(), value]);
     const rate = xirr(cashflows);
     const gain = value - invested;
-    renderResults({invested, value, gain, rate, n:rows.length, rows}, !!noscroll);
+    renderResults({invested, value, gain, rate, n:rows.length, rows, sipN, lumpN:lumps.length}, !!noscroll);
   }catch(e){
     errBox.textContent = e.message;
     errBox.classList.remove("hidden");
@@ -528,7 +754,9 @@ function renderResults(r, noscroll){
   playCounts(m);
   schedRows = r.rows; schedPage = 0;
   document.getElementById("schedNote").textContent =
-    `${r.n} monthly instalments · valued at the latest NAV (${fmtDate(NAV[NAV.length-1].d)})`;
+    `${r.sipN} monthly instalment${r.sipN===1?"":"s"}` +
+    (r.lumpN ? ` + ${r.lumpN} lumpsum${r.lumpN===1?"":"s"}` : "") +
+    ` · valued at the latest NAV (${fmtDate(NAV[NAV.length-1].d)})`;
   renderSchedPage();
   document.getElementById("schedPager").classList.toggle("hidden", r.rows.length <= SCHED_PAGE_SIZE);
   drawChart(r.rows);
@@ -542,9 +770,9 @@ function renderSchedPage(){
   schedPage = Math.min(Math.max(0, schedPage), pages-1);
   const slice = schedRows.slice(schedPage*SCHED_PAGE_SIZE, (schedPage+1)*SCHED_PAGE_SIZE);
   tb.innerHTML = slice.map(x =>
-    `<tr><td>${x.d}</td><td>${x.navDate}</td><td>₹${x.nav.toFixed(4)}</td><td>${formatINR(x.amt)}</td>` +
+    `<tr><td>${x.d}${x.type==="Lumpsum" ? ' <span class="pill" style="font-size:.62rem;padding:3px 9px;letter-spacing:1px">Lumpsum</span>' : ""}</td><td>${x.navDate}</td><td>₹${x.nav.toFixed(4)}</td><td>${formatINR(x.amt)}</td>` +
     `<td>${x.bought.toFixed(3)}</td><td>${x.units.toFixed(3)}</td><td>${formatINR(x.invested)}</td></tr>`).join("");
-  document.getElementById("pgInfo").textContent = `Page ${schedPage+1} of ${pages} · ${total} instalments`;
+  document.getElementById("pgInfo").textContent = `Page ${schedPage+1} of ${pages} · ${total} entries`;
 }
 function drawChart(rows){
   const cv = document.getElementById("chart");
@@ -572,9 +800,9 @@ function drawChart(rows){
 }
 function downloadCSV(){
   if(!schedRows.length) return;
-  const head = "SIP date,NAV date used,NAV (Rs),Invested (Rs),Units bought,Total units,Invested so far (Rs)\n";
+  const head = "Type,Date,NAV date used,NAV (Rs),Invested (Rs),Units bought,Total units,Invested so far (Rs)\n";
   const body = schedRows.map(x =>
-    [x.d, x.navDate, x.nav.toFixed(4), x.amt.toFixed(2), x.bought.toFixed(4), x.units.toFixed(4), x.invested.toFixed(2)].join(",")).join("\n");
+    [x.type, x.d, x.navDate, x.nav.toFixed(4), x.amt.toFixed(2), x.bought.toFixed(4), x.units.toFixed(4), x.invested.toFixed(2)].join(",")).join("\n");
   const blob = new Blob([head+body], {type:"text/csv"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -628,6 +856,7 @@ function init(){
   bindSlider("stepUp","stepUpSld",{min:0,max:100,step:0.5});
   // calendar pickers on date fields
   ["sipStart","sipEnd"].forEach(initDatePicker);
+  document.getElementById("lumpAdd").addEventListener("click", addLumpRow);
   loadFundList();
   updateReadiness();
 }

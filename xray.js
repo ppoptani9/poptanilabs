@@ -5,8 +5,8 @@
 const rootEl = document.documentElement;
 function paintThemeBtn(){ const t=rootEl.getAttribute("data-theme");
   const k=document.getElementById("themeKnob"), n=document.getElementById("themeName");
-  if(k) k.textContent = t==="light" ? "🌙" : "☀️";
-  if(n) n.textContent = t==="light" ? "AMOLED dark" : "Light"; }
+  if(k) k.innerHTML = t === "light" ? '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>' : '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  if(n) n.textContent = t==="light" ? "Dark" : "Light"; }
 function setTheme(t){ rootEl.setAttribute("data-theme", t); try{localStorage.setItem("swp-theme",t);}catch(e){} paintThemeBtn(); }
 setTheme((()=>{try{return localStorage.getItem("swp-theme")||"light";}catch(e){return "light";}})());
 document.getElementById("themeBtn").addEventListener("click", () =>
@@ -154,9 +154,9 @@ function runXray(){
   const v = document.getElementById("verdict");
   const wa = shortName(selected[worst.i].name), wb = shortName(selected[worst.j].name);
   let msg, cls;
-  if(worst.pct >= 50){ msg = `⚠️ <b>${wa}</b> and <b>${wb}</b> overlap <b data-countup="${worst.pct.toFixed(1)}">${worst.pct.toFixed(1)}%</b> — they're largely doing the same job. One of them is probably redundant.`; cls="var(--bad)"; }
-  else if(worst.pct >= 30){ msg = `🔍 <b>${wa}</b> and <b>${wb}</b> overlap <b data-countup="${worst.pct.toFixed(1)}">${worst.pct.toFixed(1)}%</b> — meaningful common ground, but still distinct bets.`; cls="var(--warn)"; }
-  else { msg = `✅ Highest overlap is <b data-countup="${worst.pct.toFixed(1)}">${worst.pct.toFixed(1)}%</b> (${wa} × ${wb}) — your funds are genuinely diversified.`; cls="var(--good)"; }
+  if(worst.pct >= 50){ msg = `<b>${wa}</b> and <b>${wb}</b> overlap <b data-countup="${worst.pct.toFixed(1)}">${worst.pct.toFixed(1)}%</b> — they're largely doing the same job. One of them is probably redundant.`; cls="var(--bad)"; }
+  else if(worst.pct >= 30){ msg = `<b>${wa}</b> and <b>${wb}</b> overlap <b data-countup="${worst.pct.toFixed(1)}">${worst.pct.toFixed(1)}%</b> — meaningful common ground, but still distinct bets.`; cls="var(--warn)"; }
+  else { msg = `Highest overlap is <b data-countup="${worst.pct.toFixed(1)}">${worst.pct.toFixed(1)}%</b> (${wa} × ${wb}) — your funds are genuinely diversified.`; cls="var(--good)"; }
   v.innerHTML = `<div class="scheme" style="border-left:4px solid ${cls}">${msg}</div>`;
 
   // pair selector + shared table

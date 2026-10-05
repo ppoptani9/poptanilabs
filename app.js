@@ -8,8 +8,8 @@ const ADSENSE_CLIENT = "ca-pub-6679021817940576";
 const rootEl = document.documentElement;
 function paintThemeBtn(){ const t=rootEl.getAttribute("data-theme");
   const k=document.getElementById("themeKnob"), n=document.getElementById("themeName");
-  if(k) k.textContent = t==="light" ? "🌙" : "☀️";
-  if(n) n.textContent = t==="light" ? "AMOLED dark" : "Light"; }
+  if(k) k.innerHTML = t === "light" ? '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>' : '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  if(n) n.textContent = t==="light" ? "Dark" : "Light"; }
 function setTheme(t){ rootEl.setAttribute("data-theme", t); try{localStorage.setItem("swp-theme",t);}catch(e){} paintThemeBtn(); }
 setTheme((()=>{try{return localStorage.getItem("swp-theme")||"light";}catch(e){return "light";}})());
 
@@ -64,7 +64,175 @@ let FUNDS = [];      // {c: schemeCode, n: schemeName, amc}
 let AMC_LIST = [];
 const fundState = { query:"", amc:"", selected:null };
 
-function amcOf(name){ const w = name.split(" ")[0]; return /^[A-Za-z]/.test(w) ? w : "Other"; }
+/* Canonical fund-house names from the scheme name’s leading brand prefix
+   (the bulk scheme list carries no AMC field). Longest-prefix-first match.
+   Historical renames merged: Reliance->Nippon India, IDFC->Bandhan,
+   Birla Sun Life->Aditya Birla Sun Life. */
+const AMC_NAMES = {
+  "360": "360 ONE",
+  "ABAKKUS": "Abakkus",
+  "ABN": "ABN Amro",
+  "ABN AMRO": "ABN Amro",
+  "ADITYA": "Aditya Birla Sun Life",
+  "ADITYA BIRLA": "Aditya Birla Sun Life",
+  "AIG": "AIG",
+  "ALPHAGREP": "Alphagrep",
+  "AMRO": "ABN Amro",
+  "ANARA ROBECO": "Canara Robeco",
+  "ANGEL": "Angel One",
+  "ASK": "ASK",
+  "AXIS": "Axis",
+  "BAJAJ": "Bajaj Finserv",
+  "BANDHAN": "Bandhan",
+  "BANK": "Nippon India",
+  "BANK OF INDIA": "Bank of India",
+  "BARODA": "Baroda BNP Paribas",
+  "BARODA BNP": "Baroda BNP Paribas",
+  "BARODA PIONEER": "Baroda BNP Paribas",
+  "BENCHMARK": "Benchmark",
+  "BHARAT 22": "ICICI Prudential",
+  "BHARAT BOND": "Edelweiss",
+  "BHARTI AXA": "Bharti AXA",
+  "BIRLA": "Aditya Birla Sun Life",
+  "BIRLA SUN": "Aditya Birla Sun Life",
+  "BNP": "BNP Paribas",
+  "BNP PARIBAS": "BNP Paribas",
+  "BOB": "Baroda BNP Paribas",
+  "BOI": "BOI AXA",
+  "BOI AXA": "BOI AXA",
+  "BSL": "Aditya Birla Sun Life",
+  "BSL COMM": "Aditya Birla Sun Life",
+  "CAN D": "Canara Robeco",
+  "CANARA": "Canara Robeco",
+  "CANARA ROBECO": "Canara Robeco",
+  "CANFIXED": "Canara Robeco",
+  "CANGROWTH": "Canara Robeco",
+  "CAPITALMIND": "Capitalmind",
+  "CHOICE": "Choice",
+  "CPSE": "Nippon India",
+  "DAIWA": "Daiwa",
+  "DBS": "DBS",
+  "DHFL": "DHFL Pramerica",
+  "DHFL PRAMERICA": "DHFL Pramerica",
+  "DSP": "DSP",
+  "DWS": "DWS",
+  "EDELWEISS": "Edelweiss",
+  "ESCORTS": "Escorts",
+  "ESSEL": "Essel",
+  "FIDELITY": "Fidelity",
+  "FORTIS": "Fortis",
+  "FRANKLIN": "Franklin Templeton",
+  "FRANKLIN INDIA": "Franklin Templeton",
+  "FRANKLIN TEMPLETON": "Franklin Templeton",
+  "FT INDIA": "Franklin Templeton",
+  "GCF": "Standard Chartered",
+  "GFRF": "Standard Chartered",
+  "GOLD": "Nippon India",
+  "GOLDMAN": "Goldman Sachs",
+  "GOLDMAN SACHS": "Goldman Sachs",
+  "GRINDAYS": "Standard Chartered",
+  "GRINDLAYS": "Standard Chartered",
+  "GROWW": "Groww",
+  "GSSIF": "Standard Chartered",
+  "HANG": "Nippon India",
+  "HDFC": "HDFC",
+  "HELIOS": "Helios",
+  "HSBC": "HSBC",
+  "ICICI": "ICICI Prudential",
+  "ICICI PRUDENTIAL": "ICICI Prudential",
+  "IDBI": "IDBI",
+  "IDFC": "Bandhan",
+  "IIFCL": "IIFCL",
+  "IIFL": "IIFL",
+  "IL&FS": "IL&FS",
+  "INDIABULLS": "Indiabulls",
+  "INFRASTRUCTURE": "Nippon India",
+  "ING": "ING",
+  "INVESCO": "Invesco",
+  "ITI": "ITI",
+  "JIOBLACKROCK": "JioBlackRock",
+  "JM": "JM Financial",
+  "JM FINANCIAL": "JM Financial",
+  "JM FMF": "JM Financial",
+  "JPMORGAN": "JPMorgan",
+  "KOTAK": "Kotak",
+  "KOTKA": "Kotak",
+  "L&T": "L&T",
+  "LAKSHYA": "Lakshya",
+  "LIC": "LIC",
+  "LICMF": "LIC",
+  "LOTUS INDIA": "Lotus India",
+  "MAHINDRA": "Mahindra Manulife",
+  "MAHINDRA MANULIFE": "Mahindra Manulife",
+  "MAHINDRAMANULIFE": "Mahindra Manulife",
+  "MIRAE": "Mirae Asset",
+  "MIRAE ASSET": "Mirae Asset",
+  "MOF30": "Motilal Oswal",
+  "MONARCH": "Monarch",
+  "MORGAN": "Morgan Stanley",
+  "MORGAN STANLEY": "Morgan Stanley",
+  "MOST": "Motilal Oswal",
+  "MOTILAL": "Motilal Oswal",
+  "MOTILAL OSWAL": "Motilal Oswal",
+  "NAVI": "Navi",
+  "NIFTY": "Nippon India",
+  "NIPPON": "Nippon India",
+  "NIPPON INDIA": "Nippon India",
+  "NJ": "NJ",
+  "OLD BRIDGE": "Old Bridge",
+  "OLD-SBI": "SBI",
+  "OTAK": "Kotak",
+  "PARAG PARIKH": "Parag Parikh",
+  "PEERLESS": "Peerless",
+  "PGIM": "PGIM India",
+  "PINEBRIDGE": "PineBridge",
+  "PRAMERICA": "DHFL Pramerica",
+  "PRINCIPAL": "Principal",
+  "PRINCIPAL PNB": "Principal",
+  "PSU": "Nippon India",
+  "QUANT": "Quant",
+  "QUANTUM": "Quantum",
+  "R*SHARES": "Nippon India",
+  "RAMERICA": "DHFL Pramerica",
+  "REDEEMED-SBI": "SBI",
+  "RELIANCE": "Nippon India",
+  "RELIGARE": "Religare",
+  "RELIGARE INVESCO": "Invesco",
+  "RINCIPAL": "Principal",
+  "SAHARA": "Sahara",
+  "SAHARATAX": "Sahara",
+  "SAMCO": "Samco",
+  "SBI": "SBI",
+  "SCFMP": "Standard Chartered",
+  "SHARIAH": "Nippon India",
+  "SHINSEI": "Daiwa",
+  "SHRIRAM": "Shriram",
+  "STANDARD CHARTERED": "Standard Chartered",
+  "SUNDARAM": "Sundaram",
+  "TARUS": "Tata",
+  "TATA": "Tata",
+  "TAURUS": "Taurus",
+  "TEMPLETON": "Franklin Templeton",
+  "TFMP": "Franklin Templeton",
+  "THE WEALTH COMPANY": "The Wealth Company",
+  "TRUST": "Trust",
+  "TRUSTMF": "Trust",
+  "UNIFI": "Unifi",
+  "UNION": "Union",
+  "UNION KBC": "Union",
+  "UTI": "UTI",
+  "WHITEOAK": "WhiteOak",
+  "YES": "Yes",
+  "Z-OLD-SBI": "SBI",
+  "Z-REDEEMED-SBI": "SBI",
+  "ZERODHA": "Zerodha",
+};
+const AMC_KEYS = Object.keys(AMC_NAMES).sort((a,b)=>b.length-a.length);
+function amcOf(name){
+  const up = String(name||"").trim().toUpperCase();
+  for(let i=0;i<AMC_KEYS.length;i++){ if(up.startsWith(AMC_KEYS[i])) return AMC_NAMES[AMC_KEYS[i]]; }
+  return "Other";
+}
 
 async function loadFundList(){
   const status = document.getElementById("fundStatus");
@@ -195,7 +363,7 @@ async function selectFund(code, name){
     if(!launch) launch = fmtDate(NAV[0].d);
     const latest = NAV[NAV.length-1];
     document.getElementById("schemeMeta").innerHTML =
-      `🏦 <b>Fund House:</b> ${fundHouse} &nbsp;·&nbsp; 📅 <b>Launch:</b> ${launch}<br>` +
+      `<b>Fund House:</b> ${fundHouse} &nbsp;·&nbsp; <b>Launch:</b> ${launch}<br>` +
       `Latest NAV (as on ${fmtDate(latest.d)}): <b>₹${latest.nav.toFixed(4)}</b> &nbsp;·&nbsp; ${NAV.length.toLocaleString("en-IN")} NAV records`;
     setupInputs();
   }catch(e){
@@ -448,7 +616,7 @@ function initDatePicker(id){
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = "calbtn";
-  btn.textContent = "📅";
+  btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
   btn.setAttribute("aria-label", "Pick a date from the calendar");
   btn.addEventListener("click", e => { e.stopPropagation(); openCal(el); });
   wrap.appendChild(btn);
@@ -692,7 +860,7 @@ function renderResults(r, noscroll){
         scales:{x:{ticks:{color:tick, maxTicksLimit:10}, grid:{color:grid}},
                 y:{ticks:{color:tick, callback:v=>formatINR(v)}, grid:{color:grid}}}}});
   } else if(r.rows.length){
-    wrap.innerHTML = '<div class="hint" style="padding:28px 10px">📶 Charts need an internet connection to load the chart library — your numbers and table above are complete.</div>';
+    wrap.innerHTML = '<div class="hint" style="padding:28px 10px">Charts need an internet connection to load the chart library — your numbers and table above are complete.</div>';
   }
   if(!noscroll) card.scrollIntoView({behavior:"smooth", block:"start"});
   showAds();

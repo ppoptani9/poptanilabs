@@ -10,21 +10,33 @@
 <link rel="icon" href="/favicon-16x16.png?v=20261005" sizes="16x16" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261005">
 <link rel="canonical" href="https://poptanilabs.com/fun/birthday-cosmos/">
-<title>Cosmos on Your Birthday — NASA Picture of the Day | Poptani Labs</title>
-<meta name="description" content="Pick any date since June 1995 and see NASA's Astronomy Picture of the Day — what the cosmos looked like on your birthday. Free, no sign-up.">
+<title>Your Day in the Cosmos — NASA Picture of the Day | Poptani Labs</title>
+<meta name="description" content="What did the universe look like on your special day? Pick your birthday, anniversary, wedding — any date since June 1995 — and see NASA's Astronomy Picture of the Day from that date. Free, no sign-up.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261005d">
+<link rel="stylesheet" href="/styles.css?v=20261006a">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
 <style>
 .cosmos-figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#0b0e13}
 .cosmos-figure img{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain;background:#0b0e13}
 .vidwrap{position:relative;padding-top:56.25%;background:#0b0e13}
 .vidwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.apod-meta{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin:14px 0 6px}
+.apod-meta{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin:14px 0 2px}
 .apod-meta h2{margin:0;font-size:1.35rem}
+.apod-occ{color:var(--ink);font-size:1.02rem;font-weight:700;margin:0}
+.apod-sub{color:var(--muted);font-size:.88rem;font-weight:600;margin:2px 0 6px}
 .apod-date{color:var(--muted);font-size:.9rem;font-weight:600}
+.strip-wrap{margin-top:20px}
+.strip-wrap h3{font-size:1.02rem;margin:0 0 10px}
+.strip{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 10px;scroll-snap-type:x mandatory}
+.ycard{flex:0 0 132px;scroll-snap-align:start;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit;transition:border-color .15s}
+.ycard img{width:132px;height:88px;object-fit:cover;display:block;background:#0b0e13}
+.ycard span{display:block;padding:7px 10px;font-size:.8rem;font-weight:700;color:var(--muted)}
+.ycard:hover{border-color:var(--accent)}
+.ycard.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.ycard.cur span{color:var(--ink)}
 .apod-exp{color:var(--ink);line-height:1.65;font-size:.98rem;margin:10px 0}
 .apod-credit{color:var(--muted);font-size:.82rem}
 .daterow{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
@@ -32,6 +44,9 @@
 .datefield label{font-size:.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 .datefield input[type=date]{padding:11px 14px;border:1px solid var(--line);border-radius:10px;min-width:235px;
   font-size:1.02rem;background:var(--card);color:var(--ink);font-family:inherit}
+.datefield select{padding:11px 14px;border:1px solid var(--line);border-radius:10px;min-width:190px;
+  font-size:1.02rem;background:var(--card);color:var(--ink);font-family:inherit}
+[data-theme="dark"] .datefield select{color-scheme:dark}
 .spin{display:inline-block;width:1em;height:1em;border:2.5px solid rgba(255,255,255,.35);
   border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;vertical-align:-2px}
 @keyframes rot{to{transform:rotate(360deg)}}
@@ -43,7 +58,7 @@
   <div class="wrap nav">
     <a class="brand" href="/" aria-label="Poptani Labs home"><img class="brand-mark" src="/logo-mark.svg" alt="" width="34" height="34"><img class="brand-mark brand-mark-dark" src="/logo-mark-dark.svg?v=2" alt="" width="34" height="34"><span class="brand-name">Poptani <span>Labs</span></span></a>
     <nav>
-      <div class="navdrop"><button class="navdrop-btn active" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn active" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/" class="active"><b>Birthday Cosmos</b><small>Your birthday's NASA picture of the day</small></a></div></div></div></div><a href="/blog/">Blog</a>
+      <div class="navdrop"><button class="navdrop-btn active" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a><a href="https://zerodha.com/?c=RP5185&amp;s=CONSOLE" target="_blank" rel="noopener"><b>Zerodha</b><small>Zero-brokerage stock &amp; mutual fund investing</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn active" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/" class="active"><b>Your Day in the Cosmos</b><small>What the universe looked like on your special day</small></a><a href="/fun/ink-guess/"><b>Ink Guess</b><small>Draw fast — the AI guesses live</small></a></div></div></div></div><a href="/blog/">Blog</a>
       <a href="/about.html">About</a>
       <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span><span class="lname" id="themeName">Dark</span></button>
     </nav>
@@ -52,11 +67,22 @@
 <div class="wrap">
   <div class="hero slim">
     <span class="kicker">Fun · Powered by NASA</span>
-    <h1>Cosmos on Your <span class="grad">Birthday.</span></h1>
-    <p>Every day since June 16, 1995, NASA has published one Astronomy Picture of the Day. Pick any date — your birthday, an anniversary, today — and see what the universe looked like that day.</p>
+    <h1>Your Day in the <span class="grad">Cosmos.</span></h1>
+    <p>Every day since June 16, 1995, NASA has published one Astronomy Picture of the Day. Pick your birthday, your anniversary, your wedding — any day that matters — and see what the universe looked like that day.</p>
   </div>
   <div class="card">
     <div class="daterow">
+      <div class="datefield">
+        <label for="occasion">Occasion</label>
+        <select id="occasion">
+          <option value="birthday" selected>Birthday</option>
+          <option value="anniversary">Anniversary</option>
+          <option value="wedding">Wedding day</option>
+          <option value="graduation">Graduation</option>
+          <option value="new beginning">New beginning</option>
+          <option value="">Just because</option>
+        </select>
+      </div>
       <div class="datefield">
         <label for="bdDate">Pick a date</label>
         <input type="date" id="bdDate" min="1995-06-16">
@@ -67,6 +93,7 @@
     <div id="apodErr" class="err hidden" style="margin-top:12px"></div>
   </div>
   <div class="card hidden" id="apodResult" style="margin-top:18px"></div>
+  <div class="card hidden" id="yearStripWrap" style="margin-top:18px"></div>
   <div class="card" style="margin-top:18px">
     <h2>Good to know</h2>
     <details><summary>Where do these images come from?</summary><p>NASA's <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" rel="noopener">Astronomy Picture of the Day</a> archive — one image or video of our universe, every day since June 16, 1995, each with a short explanation written by a professional astronomer. Images are shown for personal viewing with credit to their creators — NASA-created imagery is generally public domain, while many APOD images remain © their photographers as credited under each picture. Every entry links back to its original page on NASA.</p></details>
@@ -224,7 +251,7 @@ function initDatePicker(id){
 
 
 "use strict";
-/* Birthday Cosmos data comes from our first-party /api/apod service, which
+/* Your Day in the Cosmos data comes from our first-party /api/apod service, which
    pulls NASA's Astronomy Picture of the Day (official API with fallback to
    NASA's APOD archive) and caches it at the edge. */
 const APOD_START = "1995-06-16"; /* first APOD ever published */
@@ -233,6 +260,7 @@ const parseDate = s => { const [y,m,dd]=s.split("-").map(Number); return new Dat
 const prettyDate = s => parseDate(s).toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 
 const dateEl = document.getElementById("bdDate");
+const occEl = document.getElementById("occasion");
 const goBtn = document.getElementById("goBtn");
 const rndBtn = document.getElementById("rndBtn");
 const resultBox = document.getElementById("apodResult");
@@ -255,7 +283,86 @@ function showError(msg){
 }
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
-async function loadAPOD(dateStr){
+/* ---------- occasions: the dropdown earns its place ---------- */
+let lastData = null, lastDateStr = null;
+
+function occasionHeadline(){
+  switch(occEl.value){
+    case "birthday": return "The universe on the day you were born";
+    case "anniversary": return "The universe on your anniversary";
+    case "wedding": return "The universe on your wedding day";
+    case "graduation": return "The universe on your graduation day";
+    case "new beginning": return "The universe on the day everything changed";
+    default: return "The universe on this day";
+  }
+}
+function daysAgoStr(dateStr){
+  const d = parseDate(dateStr); d.setHours(0,0,0,0);
+  const t = new Date(); t.setHours(0,0,0,0);
+  const n = Math.round((t - d) / 86400000);
+  if(n <= 0) return "today";
+  if(n === 1) return "yesterday";
+  return n.toLocaleString("en-US") + " days ago";
+}
+function occasionNoun(){
+  return occEl.value === "anniversary" ? "anniversary" : "birthday";
+}
+
+/* "Every year since" filmstrip — only annual occasions (birthday,
+   anniversary) get one: the APOD from that same month/day, every year. */
+async function buildStrip(dateStr){
+  const box = document.getElementById("yearStripWrap");
+  if(!box) return;
+  const v = occEl.value;
+  if(v !== "birthday" && v !== "anniversary"){ box.innerHTML = ""; box.classList.add("hidden"); return; }
+  const [y0, m, d] = dateStr.split("-").map(Number);
+  const thisYear = new Date().getFullYear();
+  const years = [];
+  for(let y = Math.max(y0, 1995); y <= thisYear; y++){
+    const dt = `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    if(dt < APOD_START) continue;
+    // skip Feb 29 in non-leap years
+    if(m === 2 && d === 29 && new Date(y, 1, 29).getMonth() !== 1) continue;
+    years.push({y, dt});
+  }
+  if(years.length < 2){ box.innerHTML = ""; box.classList.add("hidden"); return; }
+  box.classList.remove("hidden");
+  box.innerHTML = `<h3>Every ${occasionNoun()} since</h3><div class="strip" id="yearStrip">` +
+    years.map(({y, dt}) =>
+      `<button type="button" class="ycard${dt===dateStr?" cur":""}" data-dt="${dt}">` +
+      `<img loading="lazy" alt="Cosmos on ${dt}" referrerpolicy="no-referrer">` +
+      `<span>${y}</span></button>`).join("") + `</div>`;
+  const strip = box.querySelector("#yearStrip");
+  strip.addEventListener("click", e => {
+    const c = e.target.closest(".ycard");
+    if(!c) return;
+    strip.querySelectorAll(".ycard.cur").forEach(x => x.classList.remove("cur"));
+    c.classList.add("cur");
+    loadAPOD(c.dataset.dt, {strip:false});
+  });
+  // fill thumbnails as fetches resolve; failures keep the year label only
+  await Promise.allSettled(years.map(async ({dt}) => {
+    try{
+      const r = await fetch("/api/apod?date="+dt);
+      if(!r.ok) return;
+      const j = await r.json();
+      if(!j || j.error || !j.url || j.media_type === "video") return;
+      const img = strip.querySelector(`.ycard[data-dt="${dt}"] img`);
+      if(img) img.src = j.url;
+    }catch(e){/* leave skeleton */}
+  }));
+}
+
+function renderCaption(){
+  if(!lastData || !lastDateStr) return;
+  const occ = document.getElementById("apodOcc");
+  const sub = document.getElementById("apodSub");
+  if(occ) occ.textContent = occasionHeadline();
+  if(sub) sub.textContent = prettyDate(lastData.date || lastDateStr) + " · " + daysAgoStr(lastDateStr);
+}
+
+async function loadAPOD(dateStr, opts){
+  opts = opts || {};
   errBox.classList.add("hidden");
   resultBox.classList.add("hidden");
   setLoading(true);
@@ -279,13 +386,18 @@ async function loadAPOD(dateStr){
     }
     const credit = j.copyright ? "© "+esc(j.copyright.trim()) : "Public domain · NASA";
     const orig = j.nasa_url ? ' · <a href="'+esc(j.nasa_url)+'" target="_blank" rel="noopener">View original on NASA ↗</a>' : '';
+    lastData = j; lastDateStr = dateStr;
     resultBox.innerHTML =
       '<figure class="cosmos-figure">'+media+'</figure>'+
-      '<div class="apod-meta"><h2>'+esc(j.title||"Untitled")+'</h2><span class="apod-date">'+esc(prettyDate(j.date||dateStr))+'</span></div>'+
+      '<div class="apod-meta"><h2>'+esc(j.title||"Untitled")+'</h2></div>'+
+      '<div class="apod-occ" id="apodOcc"></div>'+
+      '<div class="apod-sub" id="apodSub"></div>'+
       '<p class="apod-exp">'+esc(j.explanation||"")+'</p>'+
       '<div class="apod-credit">'+credit+' · via <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" rel="noopener">NASA APOD</a>'+orig+'</div>';
+    renderCaption();
     resultBox.classList.remove("hidden");
     resultBox.scrollIntoView({behavior:"smooth", block:"start"});
+    if(opts.strip !== false) buildStrip(dateStr);
   }catch(e){
     console.error(e);
     showError(e.message || "Something went wrong fetching the image.");
@@ -296,6 +408,10 @@ async function loadAPOD(dateStr){
 
 goBtn.addEventListener("click", () => loadAPOD(dateEl.value));
 dateEl.addEventListener("change", () => loadAPOD(dateEl.value));
+occEl.addEventListener("change", () => {
+  renderCaption();
+  if(lastDateStr) buildStrip(lastDateStr);
+});
 rndBtn.addEventListener("click", () => {
   const t0 = parseDate(APOD_START).getTime(), t1 = today.getTime();
   const d = new Date(t0 + Math.random()*(t1 - t0));
@@ -318,14 +434,12 @@ r.setAttribute("data-theme",t); try{localStorage.setItem("swp-theme",t);}catch(e
 </script>
 <footer class="site">
   <div class="wrap">
-    <div class="fl">
-      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/pdf/">PDF Tools</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
-      <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
-    </div>
-    <div>PDF tools — free, private PDF utilities that run entirely in your browser. Your files never leave your device. Built with open tools.</div>
+    <div class="fl"><a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/pdf/">PDF Tools</a><a href="/fun/">Fun</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
+    <div>Fun — small experiments and playthings from the Poptani Labs workbench.</div>
     <div class="tagline">ideas worth building.</div>
   </div>
 </footer>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js").catch(function(){});}</script>
+<script src="/mouse.js?v=20261006b" defer></script>
 </body>
 </html>

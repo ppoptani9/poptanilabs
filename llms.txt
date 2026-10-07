@@ -1,0 +1,31 @@
+# Poptani Labs
+
+> Poptani Labs (poptanilabs.com) is a free personal-finance workshop for Indian investors: interactive calculators and tools for mutual funds, loans, and PDFs, plus a daily blog on money, markets, and ideas. Tagline: "Ideas worth building." Every tool is free, runs entirely in the browser, and needs no sign-up.
+
+## Finance tools
+
+- [SWP Simulator](https://poptanilabs.com/swp/): Simulate a Systematic Withdrawal Plan from a lumpsum investment in Indian mutual funds — monthly withdrawals, inflation-adjusted payouts, and how long the corpus lasts. Built for retirees planning withdrawals under a sustainable withdrawal rate.
+- [SIP Calculator](https://poptanilabs.com/sip/): Simulate a Systematic Investment Plan on real historical NAV data for Indian mutual funds, with annual step-up options and XIRR of the simulated investment.
+- [Fund Overlap X-Ray](https://poptanilabs.com/xray/): Compare 2-4 Indian mutual funds to find shared stocks, hidden concentration, and true diversification across the portfolio.
+- [EMI Calculator](https://poptanilabs.com/emi/): EMI calculator for home, car, and personal loans in India — full amortization schedule with part-prepayment modeling (reduce EMI or reduce tenure).
+- [Fund pages](https://poptanilabs.com/sitemap.xml): 350+ individual Indian mutual fund scheme pages with NAV history and key details (see sitemap for the full list).
+
+## Other free tools
+
+- [PDF tools](https://poptanilabs.com/pdf/): Merge, split, compress, convert, rotate, and watermark PDFs — 100% in the browser, files never leave the device.
+- [Your Day in the Cosmos](https://poptanilabs.com/fun/birthday-cosmos/): Pick any date since June 1995 (birthday, anniversary, wedding) and see NASA's Astronomy Picture of the Day for it, with occasion-based headlines.
+
+## Daily blog
+
+- [The Lab Notebook](https://poptanilabs.com/blog/): A new post every day at 9:00 AM IST — Indian markets, AI news, world stories, close calls, butterfly-effect histories, big thinkers, and screen-time picks. Each post carries a real, sourced anecdote.
+
+## Data and method
+
+- Mutual fund NAV data: real historical NAV series; SIP/SWP simulations run against actual fund history, not assumed returns.
+- Calculators are educational tools, not financial advice.
+
+## About and contact
+
+- [About](https://poptanilabs.com/about.html) — what the site does and where the data comes from.
+- [Contact](https://poptanilabs.com/contact.html)
+- Full URL list: https://poptanilabs.com/sitemap.xml

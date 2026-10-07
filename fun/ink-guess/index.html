@@ -9,15 +9,18 @@
 <link rel="icon" href="/favicon-32x32.png?v=20261005" sizes="32x32" type="image/png">
 <link rel="icon" href="/favicon-16x16.png?v=20261005" sizes="16x16" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261005">
-<link rel="canonical" href="https://poptanilabs.com/fun/">
-<title>Fun — Playthings from the Lab | Poptani Labs</title>
-<meta name="description" content="Small experiments and playthings from the Poptani Labs workbench — no accounts, no purpose, just interesting.">
+<link rel="canonical" href="https://poptanilabs.com/fun/ink-guess/">
+<title>Ink Guess — Draw fast, the AI guesses live | Poptani Labs</title>
+<meta name="description" content="Ink Guess: six quick rounds of draw-and-guess. Sketch the prompt before the clock runs out while our own sketch AI guesses live — entirely in your browser.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css?v=20261006a">
+<link rel="stylesheet" href="ink-guess.css?v=20261006g">
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.0/dist/ort.min.js" defer></script>
+<script src="ink-guess.js?v=20261006f" defer></script>
 </head>
 <body>
 <div class="govbanner"><div class="wrap">● A free public site &nbsp;·&nbsp; Built by <b>Poptani Labs</b> &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Just for fun</div></div>
@@ -33,32 +36,50 @@
 </header>
 <div class="wrap">
   <div class="hero slim">
-    <span class="kicker">Just for fun · No sign-up</span>
-    <h1>Fun <span class="grad">&amp; games.</span></h1>
-    <p>Small experiments and playthings from the lab — no accounts, no purpose, just interesting.</p>
-  </div>
-  <div class="card">
-    <h2>Playthings <span class="sub">Fresh from the workbench</span></h2>
-    <div class="projects">
-      <div class="proj live">
-       
-        <span class="tic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>
-        <h3>Your Day in the Cosmos</h3>
-        <p>Birthdays, anniversaries, weddings — pick any special date since June 1995 and see NASA's Astronomy Picture of the Day from that day.</p>
-        <a class="btn go" href="/fun/birthday-cosmos/" style="text-decoration:none;white-space:nowrap">Explore the cosmos &rarr;</a>
-      </div>
-      <div class="proj live">
-        <span class="tic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7a4.95 4.95 0 0 0-7-7l-7 7v7h7z"/><path d="M9 8l7 7"/><path d="M5 19l3.5-3.5"/></svg></span>
-        <h3>Ink Guess</h3>
-        <p>Six rounds, twenty seconds each — sketch the prompt while our own sketch AI, trained on 132,000 hand drawings, guesses live in your browser.</p>
-        <a class="btn go" href="/fun/ink-guess/" style="text-decoration:none;white-space:nowrap">Start drawing &rarr;</a>
-      </div>
-    </div>
+    <span class="kicker">Just for fun · AI in your browser</span>
+    <h1>Ink <span class="grad">Guess.</span></h1>
+    <p>Six rounds, twenty seconds each. Draw the prompt before the clock runs out — our sketch AI guesses live, right on your device.</p>
   </div>
 
+  <div class="card ds-wrap">
+    <div class="ds-top">
+      <span class="meta" id="roundLabel">Round 1 of 6</span>
+      <span class="dots" id="dots"></span>
+      <span class="meta"><b id="scoreLabel">Score 0</b></span>
+    </div>
+    <div class="timer">
+      <div class="t-row"><h2 id="prompt" style="margin:0"><small>Draw this</small>…</h2><span id="timeText">20s</span></div>
+      <div class="t-track"><span id="timebar"></span></div>
+    </div>
+    <div class="pad-card">
+      <canvas id="pad" width="800" height="600" aria-label="Drawing canvas"></canvas>
+      <div class="overlay" id="overlay"></div>
+    </div>
+    <div class="guess-panel">
+      <h3>The AI thinks</h3>
+      <div id="guesses"><div class="g-empty">The AI is warming up…</div></div>
+    </div>
+    <div class="ds-actions">
+      <button class="btn ghost" id="clearBtn">Clear</button>
+      <button class="btn ghost" id="skipBtn">Skip</button>
+      <button class="btn ghost" id="soundBtn">Sound on</button>
+    </div>
+    <div class="banner hidden" id="banner"></div>
+    <div class="results hidden" id="results"></div>
+  </div>
+
+  <div class="adslot">
+    <div class="tag">Advertisement</div>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6679021817940576" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+  <script>(window.adsbygoogle = window.adsbygoogle || []).push({});</script>
+
   <div class="card" style="margin-top:18px">
-    <h2>Good to know</h2>
-    <details><summary>Is any of this serious?</summary><p>Delightfully, no. The Fun shelf is where lab experiments that don't fit the finance or utilities drawers end up. Everything here is free, needs no account, and respects the same privacy rules as the rest of the site.</p></details>
+    <h2>How it works</h2>
+    <div class="knows" id="knowsList" style="margin-bottom:14px"></div>
+    <details open><summary>Private by design</summary><p>The sketch AI runs entirely in your browser — your drawings never leave this device, are never uploaded, and never seen by anyone. There is no account and no server watching you draw.</p></details>
+    <details><summary>Trained from scratch, on open data</summary><p>The sketch AI behind Ink Guess was trained by Poptani Labs on 132,000 hand drawings from Google's <a href="https://github.com/googlecreativelab/quickdraw-dataset" target="_blank" rel="noopener">Quick, Draw! Dataset</a>, which Google shares under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. The model weights, the game code, and the interface are our own original work.</p></details>
+    <div class="attr">Dataset credit: sketches from the <a href="https://github.com/googlecreativelab/quickdraw-dataset" target="_blank" rel="noopener">Quick, Draw! Dataset</a> by Google (CC BY 4.0). Model and game © Poptani Labs.</div>
   </div>
 <script>
 (function(){var r=document.documentElement;
@@ -72,8 +93,8 @@ r.setAttribute("data-theme",t); try{localStorage.setItem("swp-theme",t);}catch(e
 </script></div>
 <footer class="site">
   <div class="wrap">
-    <div class="fl"><a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/pdf/">PDF Tools</a><a href="/fun/">Fun</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
-    <div>Fun — small experiments and playthings from the Poptani Labs workbench. Free, no sign-up.</div>
+    <div class="fl"><a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/pdf/">PDF Tools</a><a href="/fun/">Fun</a><a href="/fun/ink-guess/">Ink Guess</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
+    <div>Ink Guess — a draw-and-guess game from the Poptani Labs workbench. Free, no sign-up, private by design.</div>
     <div class="tagline">ideas worth building.</div>
   </div>
 </footer>

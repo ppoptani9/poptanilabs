@@ -15,7 +15,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261005d">
+<link rel="stylesheet" href="/styles.css?v=20261006a">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}</script>
 <!-- PAWAN: after Google AdSense approves poptanilabs.com, replace ca-pub-6679021817940576 with your publisher ID in app.js (ADSENSE_CLIENT) and on the /swp/ page. -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
 
@@ -25,7 +26,7 @@
   <div class="wrap nav">
     <a class="brand" href="/" aria-label="Poptani Labs home"><img class="brand-mark" src="/logo-mark.svg" alt="" width="34" height="34"><img class="brand-mark brand-mark-dark" src="/logo-mark-dark.svg?v=2" alt="" width="34" height="34"><span class="brand-name">Poptani <span>Labs</span></span></a>
     <nav>
-      <div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/"><b>Birthday Cosmos</b><small>Your birthday's NASA picture of the day</small></a></div></div></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a></div></div><a href="/blog/">Blog</a>
+      <div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/"><b>Your Day in the Cosmos</b><small>What the universe looked like on your special day</small></a><a href="/fun/ink-guess/"><b>Ink Guess</b><small>Draw fast — the AI guesses live</small></a></div></div></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a><a href="https://zerodha.com/?c=RP5185&amp;s=CONSOLE" target="_blank" rel="noopener"><b>Zerodha</b><small>Zero-brokerage stock &amp; mutual fund investing</small></a></div></div><a href="/blog/">Blog</a>
       <a href="/about.html">About</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/contact.html">Contact</a>
@@ -35,12 +36,14 @@
 </header>
 
 <div class="wrap">
-  <div class="hero">
+  <div class="hero has-art">
     <img class="hero-art hero-mark" src="/logo-mark.svg" alt="" aria-hidden="true">
     <img class="hero-art hero-art-dark" src="/logo-mark-dark.svg?v=2" alt="" aria-hidden="true">
+    <div class="hero-text">
     <span class="kicker">Explore · Create · Improve</span>
     <h1>Ideas <span class="grad">worth building.</span></h1>
     <p>Poptani Labs turns questions into tools. Free calculators, honest math, and experiments from a personal workbench — starting with Indian mutual funds. Everything runs in your browser; nothing asks for an account.</p>
+    </div>
   </div>
 
   <div class="card">
@@ -85,7 +88,12 @@
     <div class="toollist">
       <a class="toolrow" href="/fun/birthday-cosmos/">
         <span class="tic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 3.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>
-        <span class="tt"><b>Cosmos on Your Birthday</b><small>Pick any date since June 1995 and see NASA's Astronomy Picture of the Day.</small></span>
+        <span class="tt"><b>Your Day in the Cosmos</b><small>Birthdays, anniversaries, weddings — see NASA's Astronomy Picture of the Day from your special date.</small></span>
+        <span class="arr">→</span>
+      </a>
+      <a class="toolrow" href="/fun/ink-guess/">
+        <span class="tic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7a4.95 4.95 0 0 0-7-7l-7 7v7h7z"/><path d="M9 8l7 7"/><path d="M5 19l3.5-3.5"/></svg></span>
+        <span class="tt"><b>Ink Guess</b><small>Six quick rounds of draw-and-guess — sketch the prompt while our own AI guesses live in your browser.</small></span>
         <span class="arr">→</span>
       </a>
     </div>
@@ -121,10 +129,7 @@
 
 <footer class="site">
   <div class="wrap">
-    <div class="fl">
-      <a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/blog/">Blog</a><a href="/about.html">About</a>
-      <a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a>
-    </div>
+    <div class="fl"><a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/pdf/">PDF Tools</a><a href="/fun/">Fun</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
     <div>Poptani Labs — ideas worth building. Educational content only; not financial advice.</div>
   </div>
 </footer>
@@ -144,5 +149,6 @@
   });
 })();
 </script>
+<script src="/mouse.js?v=20261006b" defer></script>
 </body>
 </html>

@@ -1,0 +1,75 @@
+/* Ink Guess game styles — uses site theme vars */
+.ds-wrap{max-width:980px;margin:0 auto}
+.ds-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.ds-top .meta{font-weight:700;font-size:.95rem;color:var(--muted)}
+.ds-top .meta b{color:var(--ink)}
+.dots{display:flex;gap:8px}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--card2);border:1.5px solid var(--line);transition:all .25s}
+.dot.now{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 22%,transparent)}
+.dot.done{background:var(--accent);border-color:var(--accent)}
+.dot.miss{background:transparent;border-color:var(--muted)}
+.timer{margin:2px 0 14px}
+.timer .t-track{height:8px;border-radius:99px;background:var(--card2);overflow:hidden;border:1px solid var(--line)}
+.timer .t-track span{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .1s linear}
+.timer .t-track span.low{background:linear-gradient(90deg,#c0392b,#e74c3c)}
+.timer .t-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+#prompt{font-family:"Playfair Display",Georgia,serif;font-size:1.9rem;font-weight:800;margin:0}
+#prompt small{display:block;font-family:Inter,system-ui,sans-serif;font-size:.78rem;font-weight:600;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+#timeText{font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted)}
+.pad-card{position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 18px 44px rgba(14,17,20,.14)}
+#pad{display:block;width:100%;aspect-ratio:4/3;touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none}
+.overlay{position:absolute;inset:0;display:flex;overflow-y:auto;-webkit-overflow-scrolling:touch;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(6px);padding:20px;z-index:5}
+.overlay.hidden{display:none}
+.ov-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 32px;max-width:420px;margin:auto;flex-shrink:0;text-align:center;box-shadow:0 24px 60px rgba(14,17,20,.22)}
+.ov-card.wide{max-width:620px;max-height:92%;overflow:auto}
+.ov-card h2{font-family:"Playfair Display",Georgia,serif;margin:0 0 8px;font-size:1.7rem}
+.ov-sub{color:var(--muted);margin:0 0 16px;line-height:1.55}
+.ov-rules{text-align:left;color:var(--muted);font-size:.93rem;line-height:1.6;margin:0 0 20px;padding-left:20px}
+.ov-rules li{margin-bottom:6px}
+.ov-rules.short{display:none}
+.guess-panel{margin-top:14px}
+.guess-panel h3{font-size:.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:700}
+.guess{display:flex;align-items:center;gap:12px;padding:9px 4px;border-bottom:1px dashed var(--line)}
+.guess:last-child{border-bottom:0}
+.guess .g-label{font-weight:700;min-width:110px;text-align:left}
+.guess .g-bar{flex:1;height:8px;border-radius:99px;background:var(--card2);overflow:hidden}
+.guess .g-bar span{display:block;height:100%;border-radius:99px;background:var(--accent);transition:width .3s}
+.guess.top .g-bar span{background:linear-gradient(90deg,var(--accent),var(--gold))}
+.guess .g-pct{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700;min-width:44px;text-align:right}
+.g-empty{color:var(--muted);padding:14px 4px;font-size:.95rem}
+.ds-actions{display:flex;gap:10px;margin-top:14px}
+.ds-actions .btn{padding:11px 22px;font-size:.95rem}
+.btn.sm{padding:8px 18px;font-size:.88rem;margin-left:10px}
+.banner{margin-top:14px;padding:13px 16px;border-radius:12px;font-size:.98rem;line-height:1.5;border:1px solid var(--line)}
+.banner.hidden{display:none}
+.banner.win{background:color-mix(in srgb,var(--accent) 12%,var(--card));border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.banner.miss{background:var(--card2)}
+.banner b{font-weight:800}
+.results{margin-top:6px;border:1px solid var(--line);border-radius:18px;background:var(--card);padding:30px 32px;text-align:center;box-shadow:0 18px 44px rgba(14,17,20,.14)}
+.results.hidden{display:none}
+.results h2{font-family:"Playfair Display",Georgia,serif;margin:0 0 8px;font-size:1.7rem}
+.final-score{margin:6px 0 18px}
+.final-score b{font-family:"Playfair Display",Georgia,serif;font-size:2.6rem;display:block}
+.final-score span{color:var(--muted);font-size:.9rem}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.gallery figure{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.gallery img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.gallery .g-ph{aspect-ratio:4/3;background:var(--card2)}
+.gallery figcaption{padding:7px 4px;font-size:.8rem;font-weight:600;color:var(--muted);background:var(--card)}
+.gallery figure.won figcaption{color:var(--accent-deep)}
+.knows{columns:2;column-gap:24px;font-size:.92rem;color:var(--muted);line-height:1.7}
+.attr{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);margin-top:18px;padding-top:14px;line-height:1.6}
+.attr a{color:var(--accent-deep)}
+@media(max-width:560px){
+  #prompt{font-size:1.5rem}
+  .gallery{grid-template-columns:repeat(2,1fr)}
+  .ov-card{padding:18px 16px}
+  .ov-card h2{font-size:1.2rem;margin-bottom:6px}
+  .ov-sub{font-size:.85rem;line-height:1.4;margin-bottom:10px}
+  .ov-rules{display:none}
+  .ov-rules.short{display:block;font-size:.82rem;line-height:1.5;margin-bottom:12px}
+  .ov-rules.short li{margin-bottom:4px}
+  .ov-card .btn{padding:10px 22px;font-size:.9rem}
+  .guess .g-label{min-width:86px}
+  .knows{columns:1}
+}

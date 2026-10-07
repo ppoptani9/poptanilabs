@@ -5,23 +5,52 @@
 <meta name="theme-color" content="#0F5D4E">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="canonical" href="https://poptanilabs.com/blog/">
-<title>Blog — MF news in 5 minutes | Poptani Labs</title>
-<meta name="description" content="Twice a week: the latest Indian mutual fund news, summarized with credible sources — plus a rhyme from financial history at the end of every post.">
+<title>Blog — a post every day | Poptani Labs</title>
+<meta name="description" content="A daily 5-minute read: fun from around the world, AI news, Indian markets, close calls, butterfly-effect stories, philosophy, and screen time.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../styles.css?v=20261005d">
+<link rel="stylesheet" href="../styles.css?v=20261006a">
 <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("swp-theme")||"light");}catch(e){}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6679021817940576" crossorigin="anonymous"></script>
 <style>
   .postlist{display:grid;gap:16px;margin:22px 0}
-  .post{display:block;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-    padding:22px 24px;text-decoration:none;color:inherit;box-shadow:var(--shadow);transition:transform .15s}
+  .post{display:flex;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;text-decoration:none;color:inherit;box-shadow:var(--shadow);transition:transform .15s}
   .post:hover{transform:translateY(-3px)}
+  .post .thumb{width:190px;min-height:130px;object-fit:cover;border-radius:10px;flex-shrink:0;align-self:center;background:var(--card2)}
+  .post .pbody{min-width:0}
   .post .date{font-size:.8rem;color:var(--muted);font-weight:600;letter-spacing:.4px}
   .post h2{margin:8px 0;font-size:1.3rem}
   .post p{margin:0;color:var(--muted);font-size:.95rem}
   .post .more{display:inline-block;margin-top:10px;font-weight:700;color:var(--accent,#c8742c)}
+  .cattag{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+    color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:3px 10px;margin:8px 0 2px}
+  .catchips{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 2px}
+  .catchip{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;
+    padding:8px 16px;font-size:.84rem;font-weight:600;cursor:pointer;font-family:inherit}
+  .catchip:hover{border-color:var(--accent);color:var(--ink)}
+  .catchip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  [data-theme="dark"] .catchip.active{color:#0E1114}
+  .schedwrap{position:relative;display:inline-block;vertical-align:middle}
+  .infobtn{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--card);
+    color:var(--muted);font-style:italic;font-weight:700;font-size:.85rem;cursor:pointer;font-family:Georgia,serif;line-height:1}
+  .infobtn:hover{border-color:var(--accent);color:var(--accent)}
+  .schedtip{position:absolute;top:calc(100% + 10px);left:0;z-index:50;width:300px;max-width:calc(100vw - 48px);
+    background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);
+    padding:12px 16px 14px;font-size:.85rem;display:none;text-align:left;font-weight:400;line-height:1.45}
+  .schedwrap:hover .schedtip,.schedwrap:focus-within .schedtip{display:block}
+  .schedtip .tiptitle{display:block;font-weight:800;font-size:.72rem;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .schedtip .schedrow{display:flex;gap:10px;align-items:baseline;margin:5px 0}
+  .schedtip .schedrow b{min-width:82px;color:var(--ink)}
+  .schedtip .schedrow span{color:var(--muted)}
+  @media(max-width:640px){.schedtip{left:50%;right:auto;transform:translateX(-50%)}}
+  figure.inline-left{float:left;width:min(320px,44%);margin:6px 20px 12px 0;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card2)}
+  figure.inline-left img{display:block;width:100%;height:auto}
+  figure.inline-left figcaption{font-size:.75rem;color:var(--muted);padding:8px 10px}
+  figure.inline-left figcaption a{color:inherit}
+  @media(max-width:640px){figure.inline-left{float:none;width:100%;margin:0 0 14px}}
+  @media(max-width:640px){.post{flex-direction:column}.post .thumb{width:100%;height:170px}}
 </style>
 </head>
 <body>
@@ -29,7 +58,7 @@
 <header class="site"><div class="wrap nav">
 <a class="brand" href="/" aria-label="Poptani Labs home"><img class="brand-mark" src="/logo-mark.svg" alt="" width="34" height="34"><img class="brand-mark brand-mark-dark" src="/logo-mark-dark.svg?v=2" alt="" width="34" height="34"><span class="brand-name">Poptani <span>Labs</span></span></a>
 <nav>
-  <div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/"><b>Birthday Cosmos</b><small>Your birthday's NASA picture of the day</small></a></div></div></div></div>
+  <div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Tools <span class="caret">▾</span></button><div class="navdrop-menu"><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Finance</b><small>Calculators &amp; simulators</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/swp/"><b>SWP</b><small>Withdrawal simulator</small></a><a href="/sip/"><b>SIP</b><small>Investment calculator</small></a><a href="/xray/"><b>X-Ray</b><small>Fund overlap check</small></a><a href="/emi/"><b>EMI</b><small>Loan EMI calculator</small></a></div></div><div class="navdrop"><button class="navdrop-btn" aria-haspopup="true">Referrals <span class="caret">▾</span></button><div class="navdrop-menu"><a href="https://muse.ai/join" target="_blank" rel="noopener"><b>Muse</b><small>Your personal AI agent · redeem code L8QD8D</small></a><a href="https://zerodha.com/?c=RP5185&amp;s=CONSOLE" target="_blank" rel="noopener"><b>Zerodha</b><small>Zero-brokerage stock &amp; mutual fund investing</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Utilities</b><small>Everyday helpers</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/pdf/"><b>PDF</b><small>PDF utilities</small></a></div></div><div class="navsub"><button type="button" class="navsub-btn" aria-haspopup="true"><span class="navsub-t"><b>Fun</b><small>Playthings</small></span><span class="caret">▸</span></button><div class="navsub-menu"><a href="/fun/birthday-cosmos/"><b>Your Day in the Cosmos</b><small>What the universe looked like on your special day</small></a><a href="/fun/ink-guess/"><b>Ink Guess</b><small>Draw fast — the AI guesses live</small></a></div></div></div></div>
   <a href="/blog/" class="active">Blog</a>
   <a href="/about.html">About</a>
   <button class="lswitch" id="themeBtn" aria-label="Toggle theme"><span class="track"><span class="knob" id="themeKnob"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></span><span class="lname" id="themeName">Dark</span></button>
@@ -38,29 +67,56 @@
 
 <div class="wrap">
   <div class="hero slim">
-    <span class="kicker">Twice a week · 5-minute reads</span>
-    <h1>The Lab <span class="grad">Notebook</span></h1>
-    <p>The latest Indian mutual fund news — summarized in plain language, with credible sources linked under every story. And at the end of each post, a rhyme from financial history: the past episode this week's news echoes.</p>
+    <span class="kicker">Daily · 5-minute reads</span>
+    <h1>The Lab <span class="grad">Notebook</span>
+      <span class="schedwrap"><button class="infobtn" aria-label="Weekly posting schedule">i</button><span class="schedtip" role="tooltip"><span class="tiptitle">Weekly lineup</span><span class="schedrow"><b>Sunday</b><span>Fun from around the world and India</span></span><span class="schedrow"><b>Monday</b><span>The latest and greatest in the AI world</span></span><span class="schedrow"><b>Tuesday</b><span>Indian markets, in plain language</span></span><span class="schedrow"><b>Wednesday</b><span>Stories that could have gone wrong — but didn't</span></span><span class="schedrow"><b>Thursday</b><span>Butterfly-effect stories that changed the world</span></span><span class="schedrow"><b>Friday</b><span>Big thinkers — Tyson, Nye, McKenna, Pattanaik &amp; more</span></span><span class="schedrow"><b>Saturday</b><span>Moments from favourite shows and movies</span></span></span></span>
+    </h1>
+    <p>One post every day, each with its own flavour.</p>
   </div>
 
-  <div class="postlist">
-    <a class="post" href="/blog/nfo-roundup-oct-2026/">
-      <span class="date">October 6, 2026 · Weekly roundup</span>
-      <h2>7 new fund offers in one week: the NFO flood, explained</h2>
-      <p>Six NFOs and one Specialised Investment Fund opened in a single week — a life-cycle fund, India's first total-market index fund, a REIT index fund, and a long-short SIF. What each one is, who it's for, and the key dates.</p>
-      <span class="more">Read the roundup →</span>
+  <div class="catchips" id="catchips">
+    <button class="catchip active" data-cat="all" type="button">All</button>
+    <button class="catchip" data-cat="around-the-world" type="button">Around the World</button>
+    <button class="catchip" data-cat="ai-world" type="button">AI World</button>
+    <button class="catchip" data-cat="indian-markets" type="button">Indian Markets</button>
+    <button class="catchip" data-cat="close-calls" type="button">Close Calls</button>
+    <button class="catchip" data-cat="butterfly-effect" type="button">Butterfly Effect</button>
+    <button class="catchip" data-cat="big-thinkers" type="button">Big Thinkers</button>
+    <button class="catchip" data-cat="screen-time" type="button">Screen Time</button>
+  </div>
+
+  <div class="postlist" id="postlist">
+    <a class="post" href="/blog/gimli-glider-close-calls/" data-cat="close-calls">
+      <img class="thumb" src="/blog/img/gimli-glider-close-calls.jpg" alt="The Gimli Glider aircraft after its emergency landing" loading="lazy">
+      <span class="pbody">
+        <span class="date">October 7, 2026 · 9:00 AM IST</span><br>
+        <span class="cattag">Close Calls</span>
+        <h2>Out of fuel at 41,000 feet: the dead-stick landing of the Gimli Glider</h2>
+        <p>A pounds-vs-kilograms error emptied Air Canada Flight 143's tanks mid-flight. What saved 69 people: a glider-pilot captain, a drag strip, and one very lucky nose gear.</p>
+        <span class="more">Read the story →</span>
+      </span>
+    </a>
+    <a class="post" href="/blog/nfo-roundup-oct-2026/" data-cat="indian-markets">
+      <img class="thumb" src="/blog/img/nfo-roundup-oct-2026.jpg" alt="Bombay Stock Exchange building" loading="lazy">
+      <span class="pbody">
+        <span class="date">October 6, 2026 · 9:00 AM IST</span><br>
+        <span class="cattag">Indian Markets</span>
+        <h2>7 new fund offers in one week: the NFO flood, explained</h2>
+        <p>Six NFOs and one Specialised Investment Fund opened in a single week — a life-cycle fund, India's first total-market index fund, a REIT index fund, and a long-short SIF. What each one is, who it's for, and the key dates.</p>
+        <span class="more">Read the roundup →</span>
+      </span>
     </a>
   </div>
 
   <div class="card">
     <h2>How we source <span class="sub">Credible, and copyright-clean</span></h2>
     <ul>
-      <li><strong>Primary sources first:</strong> SEBI press releases, AMFI data, and the fund houses' own scheme documents whenever possible.</li>
-      <li><strong>Reputable press second:</strong> established financial publications — always linked, never copied. Every story is summarized in our own words.</li>
-      <li><strong>Facts are free:</strong> dates, minimum investments, and NAVs can't be copyrighted — but sentences can be, so we never lift them.</li>
-      <li><strong>Our charts are ours:</strong> any data visualization is computed from public NAV histories, not screenshotted from anyone.</li>
+      <li><strong>Primary sources first:</strong> company announcements, SEBI releases, and AMFI data on news days — and the thinkers' own books, shows, and podcasts on Big Thinkers Fridays.</li>
+      <li><strong>Reputable press second:</strong> established publications — always linked, never copied. Every story is summarized in our own words.</li>
+      <li><strong>Facts are free:</strong> dates, figures, and fund details can't be copyrighted — but sentences can be, so we never lift them. Every anecdote is a real, sourced event; if it can't be verified, it doesn't ship.</li>
+      <li><strong>Pictures are licensed:</strong> every image is freely licensed (Wikimedia Commons) and credited beneath it — never a copyrighted still, never a hotlink.</li>
     </ul>
-    <div class="disclaimer"><strong>Disclaimer:</strong> Educational summaries only — not financial advice. Mutual fund investments are subject to market risks; read all scheme documents carefully before investing.</div>
+    <div class="disclaimer"><strong>Disclaimer:</strong> Educational content only — not financial advice.</div>
   </div>
 
   <div class="adslot">
@@ -70,10 +126,22 @@
 </div>
 
 <footer class="site"><div class="wrap">
-<div class="fl"><a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
+<div class="fl"><a href="/swp/">SWP Simulator</a><a href="/sip/">SIP Calculator</a><a href="/xray/">Fund X-Ray</a><a href="/emi/">EMI Calculator</a><a href="/pdf/">PDF Tools</a><a href="/fun/">Fun</a><a href="/blog/">Blog</a><a href="/about.html">About</a><a href="/privacy.html">Privacy Policy</a><a href="/contact.html">Contact</a></div>
 <div>Educational content only — not financial advice. Mutual fund investments are subject to market risks.</div>
 </div></footer>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js").catch(function(){});}</script>
+<script>
+document.getElementById('catchips').addEventListener('click', e => {
+  const chip = e.target.closest('.catchip');
+  if(!chip) return;
+  document.querySelectorAll('.catchip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  const cat = chip.dataset.cat;
+  document.querySelectorAll('#postlist .post').forEach(p => {
+    p.style.display = (cat === 'all' || p.dataset.cat === cat) ? '' : 'none';
+  });
+});
+</script>
 <script>
 function paintThemeBtn(){const t=document.documentElement.getAttribute("data-theme")==="light";
   const k=document.getElementById("themeKnob"),n=document.getElementById("themeName");
@@ -83,5 +151,6 @@ document.getElementById("themeBtn").addEventListener("click",()=>{
   r.setAttribute("data-theme",t);try{localStorage.setItem("swp-theme",t);}catch(e){}paintThemeBtn();});
 paintThemeBtn();
 </script>
+<script src="/mouse.js?v=20261006b" defer></script>
 </body>
 </html>
